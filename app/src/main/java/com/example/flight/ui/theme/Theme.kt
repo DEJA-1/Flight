@@ -8,10 +8,11 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import com.example.flight.common.AppColors
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
     primary = AppColors.mMain,
-    primaryVariant = Purple700,
+    primaryVariant = AppColors.mYellow,
     secondary = AppColors.mDarkGray,
     background = AppColors.mBackgroundDark,
     surface = AppColors.mBackgroundSecDark,
@@ -19,8 +20,8 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    primary = AppColors.mMain,
-    primaryVariant = Purple700,
+    primary = AppColors.mMainLight,
+    primaryVariant = AppColors.mOrange,
     secondary = AppColors.mLightGray,
     background = AppColors.mBackgroundLight,
     surface = AppColors.mBackgroundSecLight,
@@ -38,10 +39,17 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun FlightTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+    val systemUiController = rememberSystemUiController()
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
+    }
+
+    if (darkTheme) {
+        systemUiController.setSystemBarsColor(AppColors.mBackgroundDark)
+    } else {
+        systemUiController.setSystemBarsColor(AppColors.mBackgroundLight)
     }
 
     CompositionLocalProvider(LocalSpacing provides Spacing()) {

@@ -15,6 +15,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -28,6 +29,7 @@ fun ParamsSection(
 ) {
     LazyRow() {
         items(buttonList.size) { index ->
+
             Box(
                 modifier = modifier
                     .padding(top = 10.dp, end = 8.dp)

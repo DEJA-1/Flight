@@ -76,7 +76,7 @@ fun TopSection(
                                     fontSize = 32.sp
                                 )
                             ) {
-                                append("0 ") //number of flights after retrofit call
+                                append("434 ") //number of flights after retrofit call
                             }
 
                             withStyle(
