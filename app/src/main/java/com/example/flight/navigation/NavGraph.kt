@@ -1,15 +1,20 @@
 package com.example.flight.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.flight.presentation.screen.home.HomeScreen
 import com.example.flight.presentation.screen.info.InfoScreen
 import com.example.flight.presentation.screen.saved.SavedScreen
+import com.example.flight.presentation.viewmodel.HomeViewModel
+import com.example.flight.presentation.viewmodel.ThemeViewModel
 
 @Composable
-fun NavGraph() {
+fun NavGraph(
+    themeViewModel: ThemeViewModel
+) {
     val navController = rememberNavController()
 
     NavHost(
@@ -19,7 +24,9 @@ fun NavGraph() {
         composable(
             route = Screen.Home.route
         ) {
-            HomeScreen(navController = navController)
+
+            val viewModel = viewModel<HomeViewModel>()
+            HomeScreen(navController = navController, themeViewModel = themeViewModel, viewModel = viewModel)
         }
 
         composable(

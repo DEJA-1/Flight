@@ -1,21 +1,30 @@
 package com.example.flight.ui.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import com.example.flight.common.AppColors
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
+    primary = AppColors.mMain,
     primaryVariant = Purple700,
-    secondary = Teal200
+    secondary = AppColors.mDarkGray,
+    background = AppColors.mBackgroundDark,
+    surface = AppColors.mBackgroundSecDark,
+    onBackground = AppColors.mTextWhite
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
+    primary = AppColors.mMain,
     primaryVariant = Purple700,
-    secondary = Teal200
+    secondary = AppColors.mLightGray,
+    background = AppColors.mBackgroundLight,
+    surface = AppColors.mBackgroundSecLight,
+    onBackground = AppColors.mTextBlack
 
     /* Other default colors to override
     background = Color.White,
@@ -35,10 +44,12 @@ fun FlightTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable
         LightColorPalette
     }
 
-    MaterialTheme(
-        colors = colors,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
+    CompositionLocalProvider(LocalSpacing provides Spacing()) {
+        MaterialTheme(
+            colors = colors,
+            typography = Typography,
+            shapes = Shapes,
+            content = content
+        )
+    }
 }

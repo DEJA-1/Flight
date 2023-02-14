@@ -16,7 +16,7 @@ fun SavedScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(AppColors.mBackground)
+            .background(MaterialTheme.colors.background)
     ) {
         Text(
             text = "Saved Screen",
