@@ -2,6 +2,7 @@ package com.example.flight.presentation.screen.home.components
 
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,7 +33,8 @@ import com.example.flight.ui.theme.spacing
 @Composable
 fun FlightListSection(
     modifier: Modifier = Modifier,
-    flightList: List<String> // later list<Flight>
+    flightList: List<String>, // later list<Flight>
+    onFlightClick: () -> Unit
 ) {
 
     LazyColumn(
@@ -41,7 +43,7 @@ fun FlightListSection(
             .padding(top = 4.dp)
     ) {
         items(flightList) { flight ->
-            FlightRow(flight = flight, modifier = Modifier)
+            FlightRow(flight = flight, modifier = Modifier, onFlightClick = onFlightClick)
         }
     }
 
@@ -51,14 +53,18 @@ fun FlightListSection(
 fun FlightRow(
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
-    flight: String // later flight: Fight
+    flight: String, // later flight: Fight
+    onFlightClick: () -> Unit
 ) {
 
     Card(
         modifier = modifier
             .fillMaxWidth()
             .height(100.dp)
-            .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp),
+            .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
+            .clickable {
+                onFlightClick()
+            },
         shape = RoundedCornerShape(6.dp),
         backgroundColor = MaterialTheme.colors.surface,
         elevation = 4.dp

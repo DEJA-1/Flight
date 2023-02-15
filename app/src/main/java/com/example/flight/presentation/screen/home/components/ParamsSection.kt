@@ -29,7 +29,6 @@ fun ParamsSection(
 ) {
     LazyRow() {
         items(buttonList.size) { index ->
-
             Box(
                 modifier = modifier
                     .padding(top = 10.dp, end = 8.dp)

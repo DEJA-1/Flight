@@ -3,9 +3,11 @@ package com.example.flight.presentation.screen.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -36,9 +38,17 @@ fun HomeScreen(
         ) {
             TopSection(themeViewModel = themeViewModel, viewModel = viewModel)
 
-            FlightListSection(
-                flightList = listOf("", "", "", "", "", "")
-            )
+            if (viewModel.loading.value) {
+                Box(modifier = Modifier.fillMaxSize(),contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                FlightListSection(
+                    flightList = listOf("", "", "", "", "", "")
+                ) {
+
+                }
+            }
         }
 
     }

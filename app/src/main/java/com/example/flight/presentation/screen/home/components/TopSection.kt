@@ -54,8 +54,8 @@ fun TopSection(
                 selectedButtonIndex = viewModel.selectedButtonIndex
             ) { index ->
                 viewModel.updateSelectedButtonIndex(index)
+                viewModel.getLocation("Paris")
             }
-
 
             Box(
                 modifier = Modifier.fillMaxSize(),

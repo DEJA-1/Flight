@@ -1,6 +1,7 @@
 package com.example.flight.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,7 +26,7 @@ fun NavGraph(
             route = Screen.Home.route
         ) {
 
-            val viewModel = viewModel<HomeViewModel>()
+            val viewModel = hiltViewModel<HomeViewModel>()
             HomeScreen(navController = navController, themeViewModel = themeViewModel, viewModel = viewModel)
         }
 

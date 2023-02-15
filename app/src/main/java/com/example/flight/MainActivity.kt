@@ -15,7 +15,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.flight.navigation.NavGraph
 import com.example.flight.presentation.viewmodel.ThemeViewModel
 import com.example.flight.ui.theme.FlightTheme
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
