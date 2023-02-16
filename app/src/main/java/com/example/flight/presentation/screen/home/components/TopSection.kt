@@ -1,5 +1,6 @@
 package com.example.flight.presentation.screen.home.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
@@ -19,6 +20,7 @@ import com.example.flight.common.AppColors
 import com.example.flight.presentation.viewmodel.HomeViewModel
 import com.example.flight.presentation.viewmodel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
+import kotlinx.coroutines.delay
 
 @Composable
 fun TopSection(
@@ -50,11 +52,13 @@ fun TopSection(
 
             ParamsSection(
                 isFilter = false,
+                isSave = false,
                 buttonList = viewModel.buttonList,
                 selectedButtonIndex = viewModel.selectedButtonIndex
-            ) { index ->
+            ) { index, name ->
                 viewModel.updateSelectedButtonIndex(index)
-                viewModel.getLocation("Paris")
+                viewModel.updateIsDialogOpen()
+                viewModel.updateSelectedButtonName(name)
             }
 
             Box(
@@ -62,47 +66,96 @@ fun TopSection(
                 contentAlignment = Alignment.BottomStart
             ) {
 
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Text(
-                        buildAnnotatedString {
-                            withStyle(
-                                style = SpanStyle(
-                                    color = MaterialTheme.colors.primary,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    fontSize = 32.sp
-                                )
-                            ) {
-                                append("434 ") //number of flights after retrofit call
-                            }
-
-                            withStyle(
-                                style = SpanStyle(
-                                    color = MaterialTheme.colors.onBackground,
-                                    fontWeight = FontWeight.Normal,
-                                    fontSize = 32.sp
-                                )
-                            ) {
-                                append("flights")
-                            }
-                        }
-                    )
-
-                    ParamsSection(
-                        isFilter = true,
-                        modifier = Modifier.padding(top = 10.dp, bottom = 0.dp, end = 0.dp),
-                        buttonList = viewModel.buttonListFilter,
-                        selectedButtonIndex = viewModel.selectedButtonIndex
-                    ) { index ->
-
-                    }
-
-                }
+                TopSectionBottom(viewModel)
 
             }
         }
+
+        if (viewModel.isDialogOpen.value)
+            MyDialog(openDialog = viewModel.isDialogOpen,
+                param = viewModel.selectedButtonName.value,
+                onDatePicked = { date ->
+                    viewModel.updateFlightSearch(date = date)
+                },
+                onDoneQuitClick = { param ->
+                    when (param) {
+                        "Departure" -> {
+                            viewModel.updateFlightSearch(cityDep = viewModel.location.value.cityCode.toString())
+                        }
+                        "Arrival" -> {
+                            viewModel.updateFlightSearch(cityArr = viewModel.location.value.cityCode.toString())
+                        }
+                        "Passengers" -> {
+                            viewModel.updateFlightSearch(pass = viewModel.passengers.value)
+                        }
+                        "Sort by" -> {
+
+                        }
+                        "Filter" -> {
+
+                        }
+                    }
+                }) { text ->
+                when (viewModel.selectedButtonIndex.value) {
+                    0, 1 -> {
+                        viewModel.getLocation(text)
+                    }
+                    2 -> {
+                        viewModel.updateFlightSearch(date = text)
+                    }
+                    3 -> {
+
+                    }
+                }
+            }
+
+    }
+}
+
+@Composable
+private fun TopSectionBottom(viewModel: HomeViewModel) {
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Text(
+            buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 32.sp
+                    )
+                ) {
+                    append("434 ") //number of flights after retrofit call
+                }
+
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colors.onBackground,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 32.sp
+                    )
+                ) {
+                    append("flights")
+                }
+            }
+        )
+
+        ParamsSection(
+            isFilter = true,
+            isSave = true,
+            modifier = Modifier.padding(top = 10.dp, bottom = 0.dp, end = 0.dp),
+            buttonList = viewModel.buttonListFilter,
+            selectedButtonIndex = viewModel.selectedButtonIndex
+        ) { index, name ->
+            if (name != "SAVE") {
+                viewModel.updateIsDialogOpen()
+                viewModel.updateSelectedButtonName(name)
+            }
+
+        }
+
     }
 }

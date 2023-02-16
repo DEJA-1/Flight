@@ -23,9 +23,10 @@ import androidx.compose.ui.unit.dp
 fun ParamsSection(
     buttonList: List<String>,
     isFilter: Boolean,
+    isSave: Boolean,
     selectedButtonIndex: MutableState<Int>,
     modifier: Modifier = Modifier,
-    onButtonClick: (Int) -> Unit,
+    onButtonClick: (Int, String) -> Unit,
 ) {
     LazyRow() {
         items(buttonList.size) { index ->
@@ -34,20 +35,27 @@ fun ParamsSection(
                     .padding(top = 10.dp, end = 8.dp)
                     .clip(RoundedCornerShape(18.dp))
                     .clickable {
-                        onButtonClick(index)
+                        onButtonClick(index, buttonList[index])
                     }
                     .border(
                         width = 2.dp, shape = RoundedCornerShape(18.dp),
                         color = if (selectedButtonIndex.value == index && !isFilter)
                             MaterialTheme.colors.primary
                         else
-                            MaterialTheme.colors.secondary
+                            if (buttonList[index] == "SAVE")
+                                MaterialTheme.colors.primary
+                            else
+                                MaterialTheme.colors.secondary
                     )
                     .background(
                         if (!isFilter)
                             MaterialTheme.colors.surface
                         else
-                            MaterialTheme.colors.background
+                            if (buttonList[index] == "SAVE")
+                                MaterialTheme.colors.primary
+                            else
+                                MaterialTheme.colors.background
+
                     )
                     .padding(10.dp),
                 contentAlignment = Alignment.Center

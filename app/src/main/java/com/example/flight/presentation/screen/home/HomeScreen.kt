@@ -38,17 +38,12 @@ fun HomeScreen(
         ) {
             TopSection(themeViewModel = themeViewModel, viewModel = viewModel)
 
-            if (viewModel.loading.value) {
-                Box(modifier = Modifier.fillMaxSize(),contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            } else {
-                FlightListSection(
-                    flightList = listOf("", "", "", "", "", "")
-                ) {
+            FlightListSection(
+                flightList = listOf("", "", "", "", "", "")
+            ) {
 
-                }
             }
+
         }
 
     }

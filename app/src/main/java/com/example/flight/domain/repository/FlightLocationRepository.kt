@@ -5,5 +5,5 @@ import com.example.flight.domain.model.Location
 
 interface FlightLocationRepository {
 
-    suspend fun getLocation(name: String): Resource<Location>
+    suspend fun getLocation(name: String): Resource<List<Location>>
 }

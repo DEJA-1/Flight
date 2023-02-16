@@ -8,11 +8,10 @@ import retrofit2.http.Header
 import retrofit2.http.Query
 
 interface FlightApi {
-
     @GET(value = "v1/flights/locations")
     suspend fun getLocations(
         @Query("rapidapi-key") apiKey: String = API_KEY,
         @Query("name") name : String,
-    ) : Location
+    ) : List<Location>
 
 }
