@@ -128,7 +128,7 @@ private fun TopSectionBottom(viewModel: HomeViewModel) {
                         fontSize = 32.sp
                     )
                 ) {
-                    append("434 ") //number of flights after retrofit call
+                    append("${viewModel.flightData.value.getAirFlightDepartures?.results?.result?.itinerary_count} ") //number of flights after retrofit call
                 }
 
                 withStyle(
@@ -153,6 +153,8 @@ private fun TopSectionBottom(viewModel: HomeViewModel) {
             if (name != "SAVE") {
                 viewModel.updateIsDialogOpen()
                 viewModel.updateSelectedButtonName(name)
+            } else {
+                viewModel.getFlights()
             }
 
         }

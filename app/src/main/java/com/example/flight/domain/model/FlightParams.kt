@@ -1,8 +1,10 @@
 package com.example.flight.domain.model
 
+import java.time.LocalDate
+
 data class FlightParams(
-    var departureTime: String = "",
-    var locationDeparture: String = "",
-    var locationArrival: String = "",
+    var departureTime: String = "${LocalDate.now().plusDays(4)}",
+    var locationDeparture: String = "WAW",
+    var locationArrival: String = "PAR",
     var passengers: Int = 1,
 )

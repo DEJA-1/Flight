@@ -7,6 +7,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -38,14 +39,21 @@ fun HomeScreen(
         ) {
             TopSection(themeViewModel = themeViewModel, viewModel = viewModel)
 
-            FlightListSection(
-                flightList = listOf("", "", "", "", "", "")
-            ) {
+            when (viewModel.loadingFlights.collectAsState().value) {
+                true ->  {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
+                else -> {
+                    FlightListSection(
+                        flightList = listOf("", "", "", "", "", "")
+                    ) {
 
+                    }
+                }
             }
-
         }
-
     }
-
 }
+

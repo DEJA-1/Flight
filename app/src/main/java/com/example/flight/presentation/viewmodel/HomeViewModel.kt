@@ -5,11 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flight.common.Resource
+import com.example.flight.data.network.response.flight.Test2
+import com.example.flight.data.network.response.locations.Test
 import com.example.flight.domain.model.FlightParams
 import com.example.flight.domain.model.Location
 import com.example.flight.domain.repository.FlightLocationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,11 +27,17 @@ class HomeViewModel @Inject constructor(
     private val _location = mutableStateOf(Location())
     val location = _location
 
+    private val _flightData = mutableStateOf(Test2())
+    val flightData = _flightData
+
     private val _passengers = mutableStateOf(1)
     val passengers = _passengers
 
-    private val _loading = mutableStateOf(false)
-    val loading = _loading
+    private val _loading = MutableStateFlow(false)
+    val loading = _loading.asStateFlow()
+
+    private val _loadingFlights = MutableStateFlow(false)
+    val loadingFlights = _loadingFlights.asStateFlow()
 
     private val _error = mutableStateOf("")
     val error = _error
@@ -43,6 +53,10 @@ class HomeViewModel @Inject constructor(
 
     private val _flightSearch = mutableStateOf(FlightParams())
     val flightSearch = _flightSearch
+
+    init {
+        getFlights()
+    }
 
     fun updateFlightSearch(
         cityDep: String = "", cityArr: String = "", date: String = "", pass: Int = 0
@@ -93,5 +107,29 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
+
+    fun getFlights(
+        date: String = flightSearch.value.departureTime,
+        cityDep: String = flightSearch.value.locationDeparture,
+        cityArr: String = flightSearch.value.locationArrival,
+        passengers: Int = flightSearch.value.passengers
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        _loadingFlights.value = true
+        val response = repository.getFlights(date, cityDep, cityArr, passengers)
+
+        when (response) {
+            is Resource.Success -> {
+                _flightData.value = response.data!!
+                _loadingFlights.value = false
+            }
+            is Resource.Loading -> {
+                _loadingFlights.value = false
+            }
+            is Resource.Error -> {
+                Log.d("ErrorFlight", response.message.toString())
+                _loadingFlights.value = false
+            }
+        }
+    }
 }
 

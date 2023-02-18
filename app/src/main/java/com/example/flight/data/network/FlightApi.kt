@@ -1,12 +1,11 @@
 package com.example.flight.data.network
 
-import android.content.pm.ApplicationInfo
 import com.example.flight.BuildConfig
+import com.example.flight.data.network.response.flight.Test2
+import com.example.flight.data.network.response.locations.Test
 import com.example.flight.domain.model.Location
 import retrofit2.http.GET
 import retrofit2.http.Query
-import java.io.FileInputStream
-import java.util.Properties
 
 interface FlightApi {
     @GET(value = "v1/flights/locations")
@@ -14,5 +13,16 @@ interface FlightApi {
         @Query("rapidapi-key") apiKey: String = BuildConfig.API_KEY,
         @Query("name") name : String,
     ) : List<Location>
+
+    @GET(value = "v2/flight/departures")
+    suspend fun getFlights(
+        @Query("rapidapi-key") apiKey: String = BuildConfig.API_KEY,
+        @Query("departure_date") date: String,
+        @Query("adults") passengers: Int,
+        @Query("sid") sid: String = "SIFjfID63",
+        @Query("origin_city_id") cityDep: String,
+        @Query("destination_city_id") cityArr: String,
+        @Query("number_of_itineraries") itinerariesCount: Int = 1
+    ) : Test2
 
 }
