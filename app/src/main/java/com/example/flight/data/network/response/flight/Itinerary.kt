@@ -1,5 +1,7 @@
 package com.example.flight.data.network.response.flight
 
+import com.example.flight.domain.model.flight.ItineraryModel
+
 data class Itinerary(
     val baggage_carrier: BaggageCarrier,
     val contract_page_url: String,
@@ -12,3 +14,9 @@ data class Itinerary(
     val slice_data: SliceData,
     val void_window_close: Any
 )
+
+fun Itinerary.toItineraryModel() =
+    ItineraryModel(
+        priceDetails = price_details.toPriceDetailsModel(),
+        sliceData = slice_data.toSliceDataModel()
+    )

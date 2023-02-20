@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flight.common.Resource
 import com.example.flight.data.network.response.flight.ApiResponse2
+import com.example.flight.data.network.response.flight.toResultsModel
 import com.example.flight.domain.model.FlightParams
 import com.example.flight.domain.model.Location
+import com.example.flight.domain.model.flight.ResultsModel
 import com.example.flight.domain.repository.FlightLocationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -26,7 +28,7 @@ class HomeViewModel @Inject constructor(
     private val _location = mutableStateOf(Location())
     val location = _location
 
-    private val _flightData = mutableStateOf(ApiResponse2())
+    private val _flightData = mutableStateOf(ResultsModel())
     val flightData = _flightData
 
     private val _passengers = mutableStateOf(1)
@@ -119,7 +121,7 @@ class HomeViewModel @Inject constructor(
 
         when (response) {
             is Resource.Success -> {
-                _flightData.value = response.data!!
+                _flightData.value = response.data!!.getAirFlightDepartures?.results?.toResultsModel()!!
                 _loadingFlights.value = false
             }
             is Resource.Loading -> {

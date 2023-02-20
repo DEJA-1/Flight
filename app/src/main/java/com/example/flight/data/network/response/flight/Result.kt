@@ -1,5 +1,7 @@
 package com.example.flight.data.network.response.flight
 
+import com.example.flight.domain.model.flight.ResultModel
+
 data class Result(
     val airline_data: AirlineData,
     val airport_data: AirportData,
@@ -13,3 +15,11 @@ data class Result(
     val search_type: String,
     val sid: String
 )
+
+fun Result.toResultModel(): ResultModel =
+    ResultModel(
+//        airportData = airport_data,
+//        airlineData = airline_data,
+        itineraryCount = itinerary_count,
+        itineraryData = itinerary_data
+    )

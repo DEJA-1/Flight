@@ -1,5 +1,7 @@
 package com.example.flight.data.network.response.flight
 
+import com.example.flight.domain.model.flight.InfoModel
+
 data class Info(
     val aircraft: String,
     val aircraft_type: String,
@@ -23,3 +25,13 @@ data class Info(
     val seat_selection_allowed: Boolean,
     val stop_count: Int
 )
+
+fun Info.toInfoModel(): InfoModel =
+    InfoModel(
+        aircraft = aircraft,
+        aircraftType = aircraft_type,
+        cabinClass = cabin_class,
+        cabinName = cabin_name,
+        duration = duration,
+        stopCount = stop_count
+    )

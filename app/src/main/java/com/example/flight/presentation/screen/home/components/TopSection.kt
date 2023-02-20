@@ -128,7 +128,7 @@ private fun TopSectionBottom(viewModel: HomeViewModel) {
                         fontSize = 32.sp
                     )
                 ) {
-                    append("${viewModel.flightData.value.getAirFlightDepartures?.results?.result?.itinerary_count} ") //number of flights after retrofit call
+                    append("${viewModel.flightData.value.result?.itineraryCount} ") //number of flights after retrofit call
                 }
 
                 withStyle(

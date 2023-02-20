@@ -1,5 +1,7 @@
 package com.example.flight.data.network.response.flight
 
+import com.example.flight.domain.model.flight.PriceDetailsModel
+
 data class PriceDetails(
     val accepted_credit_cards: List<Any>,
     val baseline_baseFare: Int,
@@ -37,3 +39,9 @@ data class PriceDetails(
     val source_total_fare: Double,
     val source_total_fare_per_ticket: Double
 )
+
+fun PriceDetails.toPriceDetailsModel(): PriceDetailsModel =
+    PriceDetailsModel(
+        totalPerTicket = display_total_fare_per_ticket,
+        total = display_total_fare
+    )

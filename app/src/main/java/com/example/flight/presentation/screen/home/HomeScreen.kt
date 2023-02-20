@@ -46,7 +46,7 @@ fun HomeScreen(
                     }
                 }
                 else -> {
-                    viewModel.flightData.value.getAirFlightDepartures?.results?.result?.itinerary_data?.toModel()?.itineraries
+                    viewModel.flightData.value.result?.itineraryData?.toModel()?.itineraries
                         ?.let {
                             FlightListSection(
                                 flightList = it
