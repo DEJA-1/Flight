@@ -3,8 +3,7 @@ package com.example.flight.data.repository
 import android.util.Log
 import com.example.flight.common.Resource
 import com.example.flight.data.network.FlightApi
-import com.example.flight.data.network.response.flight.Test2
-import com.example.flight.data.network.response.locations.Test
+import com.example.flight.data.network.response.flight.ApiResponse2
 import com.example.flight.domain.model.Location
 import com.example.flight.domain.repository.FlightLocationRepository
 
@@ -32,7 +31,7 @@ class FlightLocationRepositoryImpl(
         cityDep: String,
         cityArr: String,
         passengers: Int
-    ): Resource<Test2> {
+    ): Resource<ApiResponse2> {
         return try {
             Resource.Loading(true)
             val response = api.getFlights(date = date, cityDep = cityDep, cityArr = cityArr, passengers = passengers)

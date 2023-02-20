@@ -4,6 +4,8 @@ import com.example.flight.common.Constants
 import com.example.flight.data.network.FlightApi
 import com.example.flight.data.repository.FlightLocationRepositoryImpl
 import com.example.flight.domain.repository.FlightLocationRepository
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +31,7 @@ object AppModule {
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
-
+        
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

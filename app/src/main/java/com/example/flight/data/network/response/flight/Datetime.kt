@@ -6,5 +6,5 @@ data class Datetime(
     val date_time: String,
     val time_12h: String,
     val time_24h: String,
-    val time_window: List<Any>
+    val time_window: List<Any>? = null
 )

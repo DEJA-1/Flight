@@ -5,8 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flight.common.Resource
-import com.example.flight.data.network.response.flight.Test2
-import com.example.flight.data.network.response.locations.Test
+import com.example.flight.data.network.response.flight.ApiResponse2
 import com.example.flight.domain.model.FlightParams
 import com.example.flight.domain.model.Location
 import com.example.flight.domain.repository.FlightLocationRepository
@@ -27,7 +26,7 @@ class HomeViewModel @Inject constructor(
     private val _location = mutableStateOf(Location())
     val location = _location
 
-    private val _flightData = mutableStateOf(Test2())
+    private val _flightData = mutableStateOf(ApiResponse2())
     val flightData = _flightData
 
     private val _passengers = mutableStateOf(1)
@@ -71,6 +70,7 @@ class HomeViewModel @Inject constructor(
             _flightSearch.value.passengers = pass
         Log.d("TEST", flightSearch.value.toString())
     }
+
     fun updateSelectedButtonName(name: String) {
         _selectedButtonName.value = name
     }

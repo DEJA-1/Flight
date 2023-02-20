@@ -1,8 +1,7 @@
 package com.example.flight.data.network
 
 import com.example.flight.BuildConfig
-import com.example.flight.data.network.response.flight.Test2
-import com.example.flight.data.network.response.locations.Test
+import com.example.flight.data.network.response.flight.ApiResponse2
 import com.example.flight.domain.model.Location
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -22,7 +21,7 @@ interface FlightApi {
         @Query("sid") sid: String = "SIFjfID63",
         @Query("origin_city_id") cityDep: String,
         @Query("destination_city_id") cityArr: String,
-        @Query("number_of_itineraries") itinerariesCount: Int = 1
-    ) : Test2
+        @Query("number_of_itineraries") itinerariesCount: Int = 100
+    ) : ApiResponse2
 
 }

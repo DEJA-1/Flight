@@ -40,18 +40,23 @@ fun HomeScreen(
             TopSection(themeViewModel = themeViewModel, viewModel = viewModel)
 
             when (viewModel.loadingFlights.collectAsState().value) {
-                true ->  {
+                true -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
                 }
                 else -> {
-                    FlightListSection(
-                        flightList = listOf("", "", "", "", "", "")
-                    ) {
+                    viewModel.flightData.value.getAirFlightDepartures?.results?.result?.itinerary_data?.toModel()?.itineraries
+                        ?.let {
+                            FlightListSection(
+                                flightList = it
+                            ) {
 
-                    }
+                            }
+                        }
                 }
+
+
             }
         }
     }

@@ -13,6 +13,7 @@ object AppColors {
     val mYellow = Color(0xFFf5cb5c)
     val mOrange = Color(0xFFEB8500)
     val mRed = Color(0xFFfe4a49)
+    val mBlue = Color(0xFF3f48cc)
     val mTextBlack = Color(0xFF34444b)
     val mDarkGray = Color(0xFF585858)
     val mLightGray = Color(0xFFa7a7a7)

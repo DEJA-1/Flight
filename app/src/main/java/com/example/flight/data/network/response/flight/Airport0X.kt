@@ -1,7 +1,7 @@
 package com.example.flight.data.network.response.flight
 
-data class AirportNearby(
+data class Airport0X(
     val code: String,
-    val name: String,
-    val geo: Geo
+    val geo: Geo,
+    val name: String
 )

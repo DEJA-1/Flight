@@ -1,4 +1,4 @@
-package com.example.flight.data.network.response.locations
+package com.example.flight.data.network.response.flight
 
 data class Airport0(
     val city: String,

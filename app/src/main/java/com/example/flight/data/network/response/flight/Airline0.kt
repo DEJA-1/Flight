@@ -1,6 +1,6 @@
 package com.example.flight.data.network.response.flight
 
-data class AirlineSearch(
+data class Airline0(
     val code: String,
     val frequentFlyerProgram: String,
     val name: String,

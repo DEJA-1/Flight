@@ -14,7 +14,7 @@ data class Info(
     val id: Int,
     val marketing_airline: String,
     val marketing_airline_code: String,
-    val notes: Notes,
+    val notes: Any,
     val operating_airline: String,
     val operating_airline_code: String,
     val premium_seating_flag: Boolean,
