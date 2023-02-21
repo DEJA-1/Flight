@@ -6,7 +6,9 @@
 
   - Browse flights displayed by selected criteria
   
-![image](https://user-images.githubusercontent.com/83213476/220455914-43542dbc-bc06-41d2-b92e-5883bb8df55b.png)
+![image](https://user-images.githubusercontent.com/83213476/220455914-43542dbc-bc06-41d2-b92e-5883bb8df55b.png) ![ezgif com-video-to-gif (2)](https://user-images.githubusercontent.com/83213476/220468752-b4e418f7-ceed-4050-b060-48cf35c5513c.gif)
+
+
 
   - Use sorting and filtering to fine-tune your desired flight
   
