@@ -1,4 +1,4 @@
-package com.example.flight.presentation.viewmodel
+package com.example.flight.presentation.viewModel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

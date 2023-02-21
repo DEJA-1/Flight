@@ -1,12 +1,12 @@
-package com.example.flight.presentation.viewmodel
+package com.example.flight.presentation.viewModel
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flight.common.Resource
-import com.example.flight.data.network.response.flight.ApiResponse2
 import com.example.flight.data.network.response.flight.toResultsModel
+import com.example.flight.domain.model.FilterParams
 import com.example.flight.domain.model.FlightParams
 import com.example.flight.domain.model.Location
 import com.example.flight.domain.model.flight.ResultsModel
@@ -52,8 +52,17 @@ class HomeViewModel @Inject constructor(
     private val _selectedButtonName = mutableStateOf("")
     val selectedButtonName = _selectedButtonName
 
+    private val _selectedSort = mutableStateOf("")
+    val selectedSort = _selectedSort
+
+    private val _selectedDurationFilter = mutableStateOf("")
+    val selectedDurationFilter = _selectedDurationFilter
+
     private val _flightSearch = mutableStateOf(FlightParams())
-    val flightSearch = _flightSearch
+    private val flightSearch = _flightSearch
+
+    private val _filterParams = mutableStateOf(FilterParams())
+    val filterParams = _filterParams
 
     init {
         getFlights()
@@ -87,6 +96,22 @@ class HomeViewModel @Inject constructor(
 
     fun updateSelectedButtonIndex(index: Int) {
         _selectedButtonIndex.value = index
+    }
+
+    fun updateSelectedSort(sort: String) {
+        _selectedSort.value = sort
+    }
+
+    fun updateSelectedDurationFilter(filter: String) {
+        _filterParams.value.duration.value = filter.replace("<", "").replace("h", "").toInt()
+    }
+
+    fun updateDisableNextDayArrivalsFilter(isChecked: Boolean) {
+        _filterParams.value.disableNextDayArrivals.value = isChecked
+    }
+
+    fun updateSliderValue(value: Float) {
+        _filterParams.value.maxPrice.value = value.toInt()
     }
 
     fun getLocation(name: String) =

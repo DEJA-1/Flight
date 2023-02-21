@@ -1,6 +1,5 @@
 package com.example.flight.presentation.screen.home.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
@@ -16,11 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.flight.common.AppColors
-import com.example.flight.presentation.viewmodel.HomeViewModel
-import com.example.flight.presentation.viewmodel.ThemeViewModel
+import com.example.flight.presentation.viewModel.HomeViewModel
+import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
-import kotlinx.coroutines.delay
 
 @Composable
 fun TopSection(
@@ -52,7 +49,6 @@ fun TopSection(
 
             ParamsSection(
                 isFilter = false,
-                isSave = false,
                 buttonList = viewModel.buttonList,
                 selectedButtonIndex = viewModel.selectedButtonIndex
             ) { index, name ->
@@ -145,7 +141,6 @@ private fun TopSectionBottom(viewModel: HomeViewModel) {
 
         ParamsSection(
             isFilter = true,
-            isSave = true,
             modifier = Modifier.padding(top = 10.dp, bottom = 0.dp, end = 0.dp),
             buttonList = viewModel.buttonListFilter,
             selectedButtonIndex = viewModel.selectedButtonIndex

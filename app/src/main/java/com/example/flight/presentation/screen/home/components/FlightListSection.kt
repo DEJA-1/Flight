@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
@@ -29,10 +28,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.flight.common.AppColors
-import com.example.flight.data.network.response.flight.Itinerary
 import com.example.flight.domain.model.flight.ItineraryModel
 import com.example.flight.ui.theme.spacing
-import com.example.flight.util.compareDate
+import com.example.flight.util.checkIfArrivesNextDay
 import com.example.flight.util.convertTimeToHours
 
 @Composable
@@ -96,9 +94,11 @@ fun FlightRow(
             }
 
             Column() {
-
                 Text(
-                    modifier = Modifier.padding(top = 4.dp, end = 8.dp),
+                    modifier = Modifier.padding(
+                        top = MaterialTheme.spacing.extraSmall,
+                        end = MaterialTheme.spacing.medium
+                    ),
                     text = "${flight.sliceData.slice.departure.airport.city} -> ${flight.sliceData.slice.arrival.airport.city}",
                     color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.Bold,
@@ -111,8 +111,66 @@ fun FlightRow(
 
                 Column {
 
-                    Row() {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        Row() {
+                            Surface(
+                                shape = RoundedCornerShape(16.dp),
+                                color = MaterialTheme.colors.background,
+                            ) {
+                                Text(
+                                    modifier = Modifier.padding(
+                                        top = 2.dp,
+                                        bottom = 2.dp,
+                                        start = 6.dp,
+                                        end = 6.dp
+                                    ),
+                                    text = "${convertTimeToHours(flight.sliceData.slice.info.duration)}h",
+                                    color = MaterialTheme.colors.primaryVariant,
+                                    fontWeight = FontWeight.Bold,
+                                    fontStyle = FontStyle.Italic,
+                                    fontSize = 15.sp,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+
+                            if (checkIfArrivesNextDay(
+                                    flight.sliceData.slice.departure.datetime.date,
+                                    flight.sliceData.slice.arrival.datetime.date
+                                )
+                            ) {
+                                Surface(
+                                    modifier = Modifier.padding(start = 2.dp),
+                                    shape = RoundedCornerShape(16.dp),
+                                    color = MaterialTheme.colors.background
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(
+                                            top = 2.dp,
+                                            bottom = 2.dp,
+                                            start = 6.dp,
+                                            end = 6.dp
+                                        ),
+                                        text = "Arrives next day",
+                                        color = AppColors.mRed,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontStyle = FontStyle.Italic,
+                                        fontSize = 15.sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                            }
+                        }
                         Surface(
+                            modifier = Modifier.padding(
+                                start = MaterialTheme.spacing.extraSmall,
+                                end = MaterialTheme.spacing.extraSmall
+                            ),
                             shape = RoundedCornerShape(16.dp),
                             color = MaterialTheme.colors.background,
                         ) {
@@ -123,42 +181,13 @@ fun FlightRow(
                                     start = 6.dp,
                                     end = 6.dp
                                 ),
-                                text = "${convertTimeToHours(flight.sliceData.slice.info.duration)}h",
-                                color = MaterialTheme.colors.primaryVariant,
+                                text = flight.sliceData.slice.departure.datetime.time24h,
+                                color = MaterialTheme.colors.onBackground,
                                 fontWeight = FontWeight.Bold,
                                 fontStyle = FontStyle.Italic,
                                 fontSize = 15.sp,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                maxLines = 1
                             )
-                        }
-
-                        if (compareDate(
-                                flight.sliceData.slice.departure.datetime.date,
-                                flight.sliceData.slice.arrival.datetime.date
-                            )
-                        ) {
-                            Surface(
-                                modifier = Modifier.padding(start = 2.dp),
-                                shape = RoundedCornerShape(16.dp),
-                                color = MaterialTheme.colors.background
-                            ) {
-                                Text(
-                                    modifier = Modifier.padding(
-                                        top = 2.dp,
-                                        bottom = 2.dp,
-                                        start = 6.dp,
-                                        end = 6.dp
-                                    ),
-                                    text = "Arrives next day",
-                                    color = AppColors.mRed,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    fontStyle = FontStyle.Italic,
-                                    fontSize = 15.sp,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
                         }
 
                     }
@@ -217,13 +246,17 @@ fun FlightRow(
                             }
                         }
 
-
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.BottomEnd
                         ) {
                             Surface(
-                                modifier = Modifier.padding(start = 4.dp, top = 4.dp, end = 4.dp, bottom = 6.dp),
+                                modifier = Modifier.padding(
+                                    start = 4.dp,
+                                    top = 4.dp,
+                                    end = 4.dp,
+                                    bottom = 6.dp
+                                ),
                                 shape = RoundedCornerShape(16.dp),
                                 color = MaterialTheme.colors.background,
                             ) {

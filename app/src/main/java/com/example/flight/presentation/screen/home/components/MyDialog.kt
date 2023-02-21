@@ -2,19 +2,21 @@
 
 package com.example.flight.presentation.screen.home.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -34,7 +36,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.flight.R
-import com.example.flight.presentation.viewmodel.HomeViewModel
+import com.example.flight.presentation.screen.home.components.dialogUi.filter.DisableSection
+import com.example.flight.presentation.screen.home.components.dialogUi.filter.DurationSection
+import com.example.flight.presentation.screen.home.components.dialogUi.filter.SliderSection
+import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.ui.theme.spacing
 import com.example.flight.util.isTextValid
 import com.example.flight.util.loadPopularCities
@@ -98,7 +103,7 @@ fun CustomDialogUi(
                 .fillMaxWidth()
                 .padding(10.dp, 10.dp, 10.dp, 10.dp),
             elevation = 8.dp,
-            backgroundColor = MaterialTheme.colors.background
+            backgroundColor = MaterialTheme.colors.surface
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -114,13 +119,13 @@ fun CustomDialogUi(
                         )
                     }
                     "Sort by" -> {
-                        Text(
-                            text = "sort"
+                        DialogUiSort(
+                            isDoneEnabled
                         )
                     }
                     "Filter" -> {
-                        Text(
-                            text = "fil"
+                        DialogUiFilter(
+                            isDoneEnabled
                         )
                     }
                 }
@@ -163,6 +168,115 @@ fun CustomDialogUi(
 
         }
     }
+}
+
+@Composable
+fun DialogUiFilter(
+    isDoneEnabled: MutableState<Boolean>,
+    viewModel: HomeViewModel = hiltViewModel()
+) {
+    isDoneEnabled.value = true
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.80f)
+            .padding(MaterialTheme.spacing.small),
+        contentAlignment = Alignment.Center
+    ) {
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            SliderSection(viewModel = viewModel)
+
+            Divider(
+                thickness = 2.dp,
+                color = MaterialTheme.colors.secondary,
+                modifier = Modifier.padding(
+                    top = MaterialTheme.spacing.small,
+                    bottom = MaterialTheme.spacing.small
+                )
+            )
+
+            DurationSection(
+                viewModel = viewModel
+            )
+
+            Divider(
+                thickness = 2.dp,
+                color = MaterialTheme.colors.secondary,
+                modifier = Modifier.padding(
+                    top = MaterialTheme.spacing.medium,
+                    bottom = MaterialTheme.spacing.medium
+                )
+            )
+
+            DisableSection(
+                viewModel = viewModel
+            )
+        }
+    }
+
+}
+
+@Composable
+fun DialogUiSort(
+    isDoneEnabled: MutableState<Boolean>,
+    viewModel: HomeViewModel = hiltViewModel(),
+    selectedSort: MutableState<String> = viewModel.selectedSort
+) {
+
+    isDoneEnabled.value = true
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.8f)
+            .padding(MaterialTheme.spacing.small),
+        contentAlignment = Alignment.Center
+    ) {
+
+        LazyColumn() {
+            items(listOf("Price", "Departure time", "Duration")) { item ->
+                Surface(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(18.dp))
+                        .fillMaxWidth(0.6f)
+                        .padding(MaterialTheme.spacing.extraSmall)
+                        .clickable {
+                            viewModel.updateSelectedSort(item)
+                        },
+                    shape = RoundedCornerShape(18.dp),
+                    color = MaterialTheme.colors.surface,
+                    border = BorderStroke(
+                        width = 2.dp, color = if (selectedSort.value == item)
+                            MaterialTheme.colors.primary
+                        else
+                            MaterialTheme.colors.secondary
+                    )
+                ) {
+                    Text(
+                        modifier = Modifier.padding(
+                            top = MaterialTheme.spacing.small,
+                            bottom = MaterialTheme.spacing.small
+                        ),
+                        text = item,
+                        color = MaterialTheme.colors.onBackground,
+                        fontStyle = FontStyle.Italic,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+            }
+        }
+
+    }
+
 }
 
 @Composable

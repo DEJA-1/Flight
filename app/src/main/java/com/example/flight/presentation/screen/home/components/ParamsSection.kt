@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -12,6 +13,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,11 +23,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ParamsSection(
+    modifier: Modifier = Modifier,
     buttonList: List<String>,
     isFilter: Boolean,
-    isSave: Boolean,
+    isExpanded: MutableState<Boolean> = mutableStateOf(false),
     selectedButtonIndex: MutableState<Int>,
-    modifier: Modifier = Modifier,
     onButtonClick: (Int, String) -> Unit,
 ) {
     LazyRow() {
@@ -36,6 +38,8 @@ fun ParamsSection(
                     .clip(RoundedCornerShape(18.dp))
                     .clickable {
                         onButtonClick(index, buttonList[index])
+//                            if (buttonList[index] == "Sort by")
+//                                isExpanded.value = !isExpanded.value
                     }
                     .border(
                         width = 2.dp, shape = RoundedCornerShape(18.dp),
@@ -66,6 +70,9 @@ fun ParamsSection(
                     fontWeight = FontWeight.Bold
                 )
             }
+
         }
+
     }
 }
+

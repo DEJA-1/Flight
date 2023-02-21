@@ -2,24 +2,21 @@ package com.example.flight.presentation.screen.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.flight.common.AppColors
-import com.example.flight.navigation.Screen
 import com.example.flight.presentation.screen.home.components.FlightListSection
-import com.example.flight.presentation.screen.home.components.Header
 import com.example.flight.presentation.screen.home.components.TopSection
-import com.example.flight.presentation.viewmodel.HomeViewModel
-import com.example.flight.presentation.viewmodel.ThemeViewModel
+import com.example.flight.presentation.viewModel.HomeViewModel
+import com.example.flight.presentation.viewModel.ThemeViewModel
+import com.example.flight.util.convertTimeToHours
+import com.example.flight.util.filterFlights
+import com.example.flight.util.sortFlights
 
 @Composable
 fun HomeScreen(
@@ -46,14 +43,17 @@ fun HomeScreen(
                     }
                 }
                 else -> {
-                    viewModel.flightData.value.result?.itineraryData?.toModel()?.itineraries
-                        ?.let {
-                            FlightListSection(
-                                flightList = it
-                            ) {
 
-                            }
-                        }
+                    FlightListSection(
+                        flightList = filterFlights(
+                            data = sortFlights(
+                                data = viewModel.flightData.value.result?.itineraryData?.toModel()?.itineraries,
+                                criteria = viewModel.selectedSort.value
+                            )!!, filterParams = viewModel.filterParams.value
+                        )!!
+                    ) {
+
+                    }
                 }
 
 

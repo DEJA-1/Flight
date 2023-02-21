@@ -13,7 +13,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 private val DarkColorPalette = darkColors(
     primary = AppColors.mMain,
     primaryVariant = AppColors.mYellow,
-    secondary = AppColors.mDarkGray,
+    secondary = AppColors.mLightGray,
     background = AppColors.mBackgroundDark,
     surface = AppColors.mBackgroundSecDark,
     onBackground = AppColors.mTextWhite
