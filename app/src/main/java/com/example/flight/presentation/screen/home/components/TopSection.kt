@@ -84,12 +84,6 @@ fun TopSection(
                         "Passengers" -> {
                             viewModel.updateFlightSearch(pass = viewModel.passengers.value)
                         }
-                        "Sort by" -> {
-
-                        }
-                        "Filter" -> {
-
-                        }
                     }
                 }) { text ->
                 when (viewModel.selectedButtonIndex.value) {

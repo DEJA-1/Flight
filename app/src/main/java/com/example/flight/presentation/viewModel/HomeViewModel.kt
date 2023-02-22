@@ -137,8 +137,8 @@ class HomeViewModel @Inject constructor(
 
     fun getFlights(
         date: String = flightSearch.value.departureTime,
-        cityDep: String = flightSearch.value.locationDeparture,
-        cityArr: String = flightSearch.value.locationArrival,
+        cityDep: String = flightSearch.value.locationDeparture ?: "WAW",
+        cityArr: String = flightSearch.value.locationArrival ?: "PAR",
         passengers: Int = flightSearch.value.passengers
     ) = viewModelScope.launch(Dispatchers.IO) {
         _loadingFlights.value = true

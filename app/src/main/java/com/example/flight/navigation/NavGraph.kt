@@ -41,7 +41,11 @@ fun NavGraph(
         composable(
             route = Screen.Info.route
         ) {
-            InfoScreen(navController = navController)
+            InfoScreen(
+                navController = navController,
+                themeViewModel = themeViewModel,
+                commonViewModel = commonViewModel
+            )
         }
 
         composable(
