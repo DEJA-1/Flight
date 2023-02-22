@@ -37,7 +37,7 @@ import com.example.flight.util.convertTimeToHours
 fun FlightListSection(
     modifier: Modifier = Modifier,
     flightList: List<ItineraryModel>, // later list<Flight>
-    onFlightClick: () -> Unit
+    onFlightClick: (ItineraryModel) -> Unit
 ) {
 
     LazyColumn(
@@ -57,7 +57,7 @@ fun FlightRow(
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
     flight: ItineraryModel,
-    onFlightClick: () -> Unit
+    onFlightClick: (ItineraryModel) -> Unit
 ) {
 
     Card(
@@ -66,7 +66,7 @@ fun FlightRow(
             .height(100.dp)
             .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
             .clickable {
-                onFlightClick()
+                onFlightClick(flight)
             },
         shape = RoundedCornerShape(6.dp),
         backgroundColor = MaterialTheme.colors.surface,
@@ -85,7 +85,7 @@ fun FlightRow(
                 AsyncImage(
                     modifier = Modifier.fillMaxSize(),
                     model = ImageRequest.Builder(context)
-                        .data(flight.sliceData.slice.airline.logo)
+                        .data(flight.sliceData!!.slice.airline.logo)
                         .crossfade(true)
                         .build(),
                     contentScale = ContentScale.FillBounds,
@@ -99,7 +99,7 @@ fun FlightRow(
                         top = MaterialTheme.spacing.extraSmall,
                         end = MaterialTheme.spacing.medium
                     ),
-                    text = "${flight.sliceData.slice.departure.airport.city} -> ${flight.sliceData.slice.arrival.airport.city}",
+                    text = "${flight.sliceData!!.slice.departure.airport.city} -> ${flight.sliceData.slice.arrival.airport.city}",
                     color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
@@ -209,7 +209,7 @@ fun FlightRow(
                                             fontStyle = FontStyle.Italic
                                         )
                                     ) {
-                                        append("$${flight.priceDetails.totalPerTicket.toInt()}")
+                                        append("$${flight.priceDetails!!.totalPerTicket.toInt()}")
                                     }
 
                                 },

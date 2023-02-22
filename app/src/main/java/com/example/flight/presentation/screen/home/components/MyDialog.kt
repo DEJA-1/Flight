@@ -81,6 +81,7 @@ fun CustomDialogUi(
     openDialogCustom: MutableState<Boolean> = mutableStateOf(false),
     param: String,
     text: MutableState<String>,
+    viewModel: HomeViewModel = hiltViewModel(),
     onDatePicked: (String) -> Unit,
     onDoneQuitClick: (String) -> Unit,
     onDoneClick: (String) -> Unit
@@ -111,7 +112,13 @@ fun CustomDialogUi(
 
                 when (param) {
                     "Departure", "Arrival" -> {
-                        DialogUiCity(text, keyboardController, isDoneEnabled, onDoneClick)
+                        DialogUiCity(
+                            text,
+                            keyboardController,
+                            isDoneEnabled,
+                            viewModel.loading.collectAsState().value,
+                            onDoneClick
+                        )
                     }
                     "Passengers" -> {
                         DialogUiPassenger(
@@ -411,6 +418,7 @@ fun DialogUiCity(
     text: MutableState<String>,
     keyboardController: SoftwareKeyboardController?,
     isDoneEnabled: MutableState<Boolean>,
+    loading: Boolean,
     onDoneClick: (String) -> Unit
 ) {
     Box(
@@ -429,7 +437,8 @@ fun DialogUiCity(
                     if (isTextValid(text.value)) {
                         keyboardController?.hide()
 
-                        isDoneEnabled.value = true
+                        if (!loading)
+                            isDoneEnabled.value = true
                         onDoneClick(text.value)
                     }
                 }

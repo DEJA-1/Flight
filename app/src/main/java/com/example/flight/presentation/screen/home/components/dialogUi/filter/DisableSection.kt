@@ -23,7 +23,7 @@ fun DisableSection(
 ) {
 
     val isChecked = remember {
-        mutableStateOf(false)
+        mutableStateOf(viewModel.filterParams.value.disableNextDayArrivals.value)
     }
 
     Row(horizontalArrangement = Arrangement.SpaceBetween) {

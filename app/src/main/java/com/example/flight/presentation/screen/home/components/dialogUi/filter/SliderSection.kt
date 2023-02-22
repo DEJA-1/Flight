@@ -23,7 +23,7 @@ fun SliderSection(
 ) {
 
     val sliderValue = remember {
-        mutableStateOf(10000f)
+        mutableStateOf(viewModel.filterParams.value.maxPrice.value.toFloat())
     }
 
     Slider(

@@ -7,7 +7,6 @@ class ThemeViewModel : ViewModel() {
 
    private val _isDarkTheme = mutableStateOf(false)
     val isDarkTheme = _isDarkTheme
-
     fun switchTheme() {
         _isDarkTheme.value = !_isDarkTheme.value
     }
