@@ -103,7 +103,7 @@ fun FlightInfoSection(
 @Composable
 fun StopButton(
     flight: ItineraryModel,
-    onStopInfoClicked: () -> Unit
+    onStopInfoClicked: (String) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -114,12 +114,12 @@ fun StopButton(
                 if (checkIfConnections(flight))
                     AppColors.mBlue
                 else
-                    MaterialTheme.colors.background
+                    MaterialTheme.colors.secondary
             )
             .clickable(
                 enabled = checkIfConnections(flight)
             ) {
-                onStopInfoClicked()
+                onStopInfoClicked("Stop info")
             },
         horizontalArrangement = Arrangement.Center
     ) {
@@ -134,38 +134,5 @@ fun StopButton(
     }
 }
 
-@Preview
-@Composable
-fun FlightDrawing() {
 
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .height(3.dp)
-                .background(MaterialTheme.colors.secondary)
-        ) {
-
-        }
-
-        Icon(
-            modifier = Modifier
-                .padding(
-                    start = MaterialTheme.spacing.extraSmall,
-                    end = MaterialTheme.spacing.extraSmall
-                )
-                .size(26.dp)
-                .rotate(90f),
-            painter = painterResource(id = com.example.flight.R.drawable.airplane),
-            contentDescription = "Airplane image",
-            tint = MaterialTheme.colors.secondary
-        )
-
-    }
-
-}
 

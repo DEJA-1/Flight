@@ -6,6 +6,8 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -30,6 +32,9 @@ fun InfoScreen(
 ) {
 
     val flight = commonViewModel.currentItinerary.value
+    val isDialogOpen = remember {
+        mutableStateOf(false)
+    }
 
     Box(
         modifier = Modifier
@@ -73,11 +78,12 @@ fun InfoScreen(
                 FlightInfoSection(
                     flight = flight
                 ) {
-
+                    isDialogOpen.value = !isDialogOpen.value
                 }
 
                 FlightDetailsSection(
-                    flight = flight
+                    flight = flight,
+                    commonViewModel = commonViewModel
                 ) {
 
                 }

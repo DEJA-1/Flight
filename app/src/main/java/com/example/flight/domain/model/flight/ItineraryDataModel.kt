@@ -7,5 +7,3 @@ import com.example.flight.util.filterFlights
 data class ItineraryDataModel(
     val itineraries: List<ItineraryModel>
 )
-
-fun ItineraryDataModel.filterItineraries() = filterFlights(filterParams = FilterParams(), data = itineraries)

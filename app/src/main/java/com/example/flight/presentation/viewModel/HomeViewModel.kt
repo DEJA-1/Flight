@@ -59,7 +59,7 @@ class HomeViewModel @Inject constructor(
     val selectedDurationFilter = _selectedDurationFilter
 
     private val _flightSearch = mutableStateOf(FlightParams())
-    private val flightSearch = _flightSearch
+    val flightSearch = _flightSearch
 
     private val _filterParams = mutableStateOf(FilterParams())
     val filterParams = _filterParams

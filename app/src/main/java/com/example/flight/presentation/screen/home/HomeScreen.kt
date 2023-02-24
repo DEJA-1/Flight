@@ -51,7 +51,19 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            TopSection(themeViewModel = themeViewModel, viewModel = viewModel)
+            TopSection(
+                themeViewModel = themeViewModel,
+                viewModel = viewModel,
+                commonViewModel = commonViewModel
+            ) { name ->
+                if (name != "SAVE") {
+                    viewModel.updateIsDialogOpen()
+                    viewModel.updateSelectedButtonName(name)
+                } else {
+                    commonViewModel.updateCurrentFlightParams(viewModel.flightSearch.value)
+                    viewModel.getFlights()
+                }
+            }
 
             when (viewModel.loadingFlights.collectAsState().value) {
                 true -> {

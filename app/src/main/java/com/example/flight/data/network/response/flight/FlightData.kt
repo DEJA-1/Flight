@@ -4,11 +4,19 @@ import com.example.flight.domain.model.flight.FlightDataModel
 
 data class FlightData(
     val flight_0: Flight,
-    val flight_1: Flight?
+    val flight_1: Flight?,
+    val flight_2: Flight?,
+    val flight_3: Flight?,
+    val flight_4: Flight?
 )
 
 fun FlightData.toFlightDataModel(): FlightDataModel =
     FlightDataModel(
-        flight0 = flight_0.toFlightModel(),
-        flight1 = flight_1?.toFlightModel()
+        listOfNotNull(
+            flight_0,
+            flight_1,
+            flight_2,
+            flight_3,
+            flight_4
+        ).map { it.toFlightModel() }
     )

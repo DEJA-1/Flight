@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.flight.presentation.viewModel.CommonViewModel
 import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
@@ -22,7 +23,9 @@ import com.example.flight.ui.theme.spacing
 @Composable
 fun TopSection(
     themeViewModel: ThemeViewModel,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    commonViewModel: CommonViewModel,
+    onParamsClicked: (String) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -62,13 +65,16 @@ fun TopSection(
                 contentAlignment = Alignment.BottomStart
             ) {
 
-                TopSectionBottom(viewModel)
+                TopSectionBottom(viewModel) { name ->
+                    onParamsClicked(name)
+                }
 
             }
         }
 
         if (viewModel.isDialogOpen.value)
             MyDialog(openDialog = viewModel.isDialogOpen,
+                commonViewModel = commonViewModel,
                 param = viewModel.selectedButtonName.value,
                 onDatePicked = { date ->
                     viewModel.updateFlightSearch(date = date)
@@ -103,7 +109,10 @@ fun TopSection(
 }
 
 @Composable
-private fun TopSectionBottom(viewModel: HomeViewModel) {
+private fun TopSectionBottom(
+    viewModel: HomeViewModel,
+    onParamsClicked: (String) -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -139,12 +148,8 @@ private fun TopSectionBottom(viewModel: HomeViewModel) {
             buttonList = viewModel.buttonListFilter,
             selectedButtonIndex = viewModel.selectedButtonIndex
         ) { index, name ->
-            if (name != "SAVE") {
-                viewModel.updateIsDialogOpen()
-                viewModel.updateSelectedButtonName(name)
-            } else {
-                viewModel.getFlights()
-            }
+
+            onParamsClicked(name)
 
         }
 

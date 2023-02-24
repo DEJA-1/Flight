@@ -44,6 +44,8 @@ import com.example.flight.presentation.screen.home.components.dialogUi.filter.Du
 import com.example.flight.presentation.screen.home.components.dialogUi.filter.SliderSection
 import com.example.flight.presentation.screen.home.components.dialogUi.passenger.DialogUiPassenger
 import com.example.flight.presentation.screen.home.components.dialogUi.sort.DialogUiSort
+import com.example.flight.presentation.screen.home.components.dialogUi.stop.DialogUiStopInfo
+import com.example.flight.presentation.viewModel.CommonViewModel
 import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.ui.theme.spacing
 import com.example.flight.util.isTextValid
@@ -60,6 +62,7 @@ fun MyDialog(
     openDialog: MutableState<Boolean>,
     param: String,
     text: MutableState<String> = mutableStateOf(""),
+    commonViewModel: CommonViewModel,
     onDatePicked: (String) -> Unit,
     onDoneQuitClick: (String) -> Unit,
     onDoneClick: (String) -> Unit
@@ -71,6 +74,7 @@ fun MyDialog(
                 openDialogCustom = openDialog,
                 param = param,
                 text,
+                commonViewModel = commonViewModel,
                 onDatePicked = onDatePicked,
                 onDoneQuitClick = onDoneQuitClick
             ) { text ->
@@ -87,6 +91,7 @@ fun CustomDialogUi(
     param: String,
     text: MutableState<String>,
     viewModel: HomeViewModel = hiltViewModel(),
+    commonViewModel: CommonViewModel,
     onDatePicked: (String) -> Unit,
     onDoneQuitClick: (String) -> Unit,
     onDoneClick: (String) -> Unit
@@ -140,6 +145,13 @@ fun CustomDialogUi(
                             isDoneEnabled
                         )
                     }
+
+                    "Stop info" -> {
+                        DialogUiStopInfo(
+                            isDoneEnabled,
+                            commonViewModel.currentItinerary.value.sliceData!!.slice.flightData.flights
+                        )
+                    }
                 }
 
                 Box(
@@ -181,6 +193,7 @@ fun CustomDialogUi(
         }
     }
 }
+
 
 
 
