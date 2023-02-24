@@ -20,6 +20,7 @@ import com.example.flight.common.AppColors
 import com.example.flight.presentation.screen.home.components.Header
 import com.example.flight.presentation.screen.info.components.FlightDetailsSection
 import com.example.flight.presentation.screen.info.components.FlightInfoSection
+import com.example.flight.presentation.screen.info.components.dialog.stop.DialogStop
 import com.example.flight.presentation.viewModel.CommonViewModel
 import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
@@ -91,6 +92,12 @@ fun InfoScreen(
             }
 
 
+        }
+
+        if (isDialogOpen.value){
+            DialogStop(openDialog = isDialogOpen, flights = flight.sliceData!!.slice.flightData.flights) {
+                isDialogOpen.value = false
+            }
         }
 
     }

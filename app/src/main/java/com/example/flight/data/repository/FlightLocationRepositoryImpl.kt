@@ -10,12 +10,11 @@ import com.example.flight.domain.repository.FlightLocationRepository
 class FlightLocationRepositoryImpl(
     private val api: FlightApi
 ) : FlightLocationRepository {
-    override suspend fun getLocation(name: String) : Resource<List<Location>>{
+    override suspend fun getLocation(name: String): Resource<List<Location>> {
         return try {
             Resource.Loading(true)
             val response = api.getLocations(name = name)
             Log.d("Response", response.toString())
-
 
             if (response.first().cityName?.isNotEmpty() == true)
                 Resource.Loading(false)
@@ -26,22 +25,25 @@ class FlightLocationRepositoryImpl(
         }
     }
 
-    override suspend fun getFlights(
-        date: String,
-        cityDep: String,
-        cityArr: String,
-        passengers: Int
-    ): Resource<ApiResponse2> {
+    override suspend fun getFlights(date: String, cityDep: String, cityArr: String, passengers: Int): Resource<ApiResponse2> {
         return try {
             Resource.Loading(true)
-            val response = api.getFlights(date = date, cityDep = cityDep, cityArr = cityArr, passengers = passengers)
+            val response = api.getFlights(
+                date = date,
+                cityDep = cityDep,
+                cityArr = cityArr,
+                passengers = passengers
+            )
             Log.d("Response", response.toString())
 
-            if (response.getAirFlightDepartures != null)
-                Resource.Loading(false)
-            Resource.Success(response)
+            if (response.getAirFlightDepartures.results.result == null) {
+                Resource.Error(message = "No results")
+            } else {
+                Resource.Success(response)
+            }
         } catch (e: Exception) {
             Resource.Error(message = e.message.toString())
         }
     }
+
 }

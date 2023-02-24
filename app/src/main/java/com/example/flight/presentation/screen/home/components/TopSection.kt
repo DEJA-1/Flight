@@ -15,11 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-<<<<<<< HEAD
 import com.example.flight.presentation.viewModel.CommonViewModel
-=======
 import com.example.flight.presentation.screen.home.components.dialog.*
->>>>>>> fixDialogUi
 import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
@@ -76,18 +73,7 @@ fun TopSection(
             }
         }
 
-<<<<<<< HEAD
-        if (viewModel.isDialogOpen.value)
-            MyDialog(openDialog = viewModel.isDialogOpen,
-                commonViewModel = commonViewModel,
-                param = viewModel.selectedButtonName.value,
-                onDatePicked = { date ->
-                    viewModel.updateFlightSearch(date = date)
-                },
-                onDoneQuitClick = { param ->
-                    when (param) {
-                        "Departure" -> {
-=======
+
         if (viewModel.isDialogOpen.value) {
             when (viewModel.selectedButtonName.value) {
                 "Departure" -> {
@@ -95,7 +81,6 @@ fun TopSection(
                         openDialog = viewModel.isDialogOpen,
                         onDoneQuitClick = {
                             viewModel.isDialogOpen.value = false
->>>>>>> fixDialogUi
                             viewModel.updateFlightSearch(cityDep = viewModel.location.value.cityCode.toString())
                         }) { city ->
                         viewModel.getLocation(city)
@@ -139,36 +124,6 @@ fun TopSection(
             }
         }
 
-//            MyDialog(openDialog = viewModel.isDialogOpen,
-//                param = viewModel.selectedButtonName.value,
-//                onDatePicked = { date ->
-//                    viewModel.updateFlightSearch(date = date)
-//                },
-//                onDoneQuitClick = { param ->
-//                    when (param) {
-//                        "Departure" -> {
-//                            viewModel.updateFlightSearch(cityDep = viewModel.location.value.cityCode.toString())
-//                        }
-//                        "Arrival" -> {
-//                            viewModel.updateFlightSearch(cityArr = viewModel.location.value.cityCode.toString())
-//                        }
-//                        "Passengers" -> {
-//                            viewModel.updateFlightSearch(pass = viewModel.passengers.value)
-//                        }
-//                    }
-//                }) { text ->
-//                when (viewModel.selectedButtonIndex.value) {
-//                    0, 1 -> {
-//                        viewModel.getLocation(text)
-//                    }
-//                    2 -> {
-//                        viewModel.updateFlightSearch(date = text)
-//                    }
-//                    3 -> {
-//
-//                    }
-//                }
-//            }
 
     }
 }

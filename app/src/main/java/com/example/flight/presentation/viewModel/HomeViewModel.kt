@@ -1,7 +1,9 @@
 package com.example.flight.presentation.viewModel
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flight.common.Resource
@@ -135,8 +137,7 @@ class HomeViewModel @Inject constructor(
             }
         }
 
-    fun getFlights(
-        date: String = flightSearch.value.departureTime,
+    fun getFlights(date: String = flightSearch.value.departureTime,
         cityDep: String = flightSearch.value.locationDeparture ?: "WAW",
         cityArr: String = flightSearch.value.locationArrival ?: "PAR",
         passengers: Int = flightSearch.value.passengers
@@ -154,6 +155,7 @@ class HomeViewModel @Inject constructor(
             }
             is Resource.Error -> {
                 Log.d("ErrorFlight", response.message.toString())
+
                 _loadingFlights.value = false
             }
         }
