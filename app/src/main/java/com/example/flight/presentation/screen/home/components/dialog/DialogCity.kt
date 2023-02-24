@@ -1,21 +1,21 @@
-package com.example.flight.presentation.screen.home.components.dialogUi.city
+@file:OptIn(ExperimentalComposeUiApi::class)
 
+package com.example.flight.presentation.screen.home.components.dialog
+
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -23,30 +23,73 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.example.flight.R
+import com.example.flight.presentation.screen.common_components.DoneButton
 import com.example.flight.presentation.screen.home.components.InputTextField
 import com.example.flight.ui.theme.spacing
 import com.example.flight.util.isTextValid
 import com.example.flight.util.loadPopularCities
+import java.util.*
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun DialogUiCity(
-    text: MutableState<String>,
-    keyboardController: SoftwareKeyboardController?,
-    isDoneEnabled: MutableState<Boolean>,
-    loading: Boolean,
+fun DialogCity(
+    openDialog: MutableState<Boolean>,
+    text: MutableState<String> = mutableStateOf(""),
+    onDoneQuitClick: () -> Unit,
     onDoneClick: (String) -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxSize(0.8f)
-            .padding(MaterialTheme.spacing.small),
-        contentAlignment = Alignment.TopCenter
-    ) {
 
-        Column {
+    if (openDialog.value) {
+        Dialog(onDismissRequest = { openDialog.value = false }) {
+            CustomDialogUiCity(
+                text = text,
+                onDoneQuitClick = onDoneQuitClick
+            ) { city ->
+                onDoneClick(city)
+            }
+        }
+    }
+}
+@Composable
+fun CustomDialogUiCity(
+    text: MutableState<String>,
+    onDoneQuitClick: () -> Unit,
+    onDoneClick: (String) -> Unit
+) {
+    CityDialogUi(
+        text = text,
+        onDoneClick = onDoneClick,
+        onDoneQuitClick = onDoneQuitClick
+    )
+}
+
+@Composable
+fun CityDialogUi(
+    text: MutableState<String>,
+    onDoneClick: (String) -> Unit,
+    onDoneQuitClick: () -> Unit
+) {
+
+    val isDoneEnabled = remember {
+        mutableStateOf(false)
+    }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier
+            .fillMaxHeight(0.7f)
+            .fillMaxWidth()
+            .padding(10.dp),
+        elevation = 8.dp,
+        backgroundColor = MaterialTheme.colors.surface
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(MaterialTheme.spacing.small),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             InputTextField(
                 text = text,
                 label = "Enter a city",
@@ -54,8 +97,7 @@ fun DialogUiCity(
                     if (isTextValid(text.value)) {
                         keyboardController?.hide()
 
-                        if (!loading)
-                            isDoneEnabled.value = true
+                        isDoneEnabled.value = true
                         onDoneClick(text.value)
                     }
                 }
@@ -100,5 +142,13 @@ fun DialogUiCity(
             }
 
         }
+
+        DoneButton(isDoneEnabled = isDoneEnabled, onDoneQuitClick =  onDoneQuitClick)
     }
 }
+
+
+
+
+
+

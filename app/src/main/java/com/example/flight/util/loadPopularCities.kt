@@ -13,7 +13,6 @@ fun loadPopularCities() : List<String> {
         "New York",
         "Istanbul",
         "Tokyo",
-        "Antalya",
         "Seoul",
         "Osaka"
 
