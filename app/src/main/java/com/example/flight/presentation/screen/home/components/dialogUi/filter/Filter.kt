@@ -9,6 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.flight.presentation.screen.home.components.dialog.DisableSection
+import com.example.flight.presentation.screen.home.components.dialog.DurationSection
+import com.example.flight.presentation.screen.home.components.dialog.SliderSection
 import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.ui.theme.spacing
 

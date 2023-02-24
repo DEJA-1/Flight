@@ -47,57 +47,6 @@ fun DialogUiCity(
     ) {
 
         Column {
-            InputTextField(
-                text = text,
-                label = "Enter a city",
-                onAction = KeyboardActions {
-                    if (isTextValid(text.value)) {
-                        keyboardController?.hide()
-
-                        if (!loading)
-                            isDoneEnabled.value = true
-                        onDoneClick(text.value)
-                    }
-                }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.airplane),
-                    contentDescription = "airplane icon"
-                )
-            }
-
-            Divider(
-                thickness = 2.dp,
-                color = MaterialTheme.colors.secondary,
-                modifier = Modifier.padding(
-                    top = MaterialTheme.spacing.large,
-                    bottom = MaterialTheme.spacing.large
-                )
-            )
-
-            LazyVerticalGrid(columns = GridCells.Fixed(3)) {
-                items(loadPopularCities().shuffled()) {
-                    Text(
-                        modifier = Modifier
-                            .padding(
-                                bottom = MaterialTheme.spacing.small,
-                                start = MaterialTheme.spacing.small,
-                                end = MaterialTheme.spacing.small
-                            )
-                            .clickable {
-                                text.value = it
-                            },
-                        text = it,
-                        color = MaterialTheme.colors.onBackground,
-                        fontStyle = FontStyle.Italic,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
 
         }
     }
