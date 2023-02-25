@@ -10,16 +10,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.flight.presentation.screen.home.HomeScreen
 import com.example.flight.presentation.screen.info.InfoScreen
 import com.example.flight.presentation.screen.saved.SavedScreen
-import com.example.flight.presentation.viewModel.CommonViewModel
-import com.example.flight.presentation.viewModel.HomeViewModel
-import com.example.flight.presentation.viewModel.ThemeViewModel
+import com.example.flight.presentation.viewModel.*
 
 @Composable
 fun NavGraph(
     themeViewModel: ThemeViewModel
 ) {
     val navController = rememberNavController()
-    val commonViewModel = viewModel<CommonViewModel>()
+    val commonViewModel = hiltViewModel<CommonViewModel>()
 
     NavHost(
         navController = navController,
@@ -28,7 +26,6 @@ fun NavGraph(
         composable(
             route = Screen.Home.route
         ) {
-
             val viewModel = hiltViewModel<HomeViewModel>()
             HomeScreen(
                 navController = navController,
@@ -41,9 +38,9 @@ fun NavGraph(
         composable(
             route = Screen.Info.route
         ) {
+            val viewModel = hiltViewModel<InfoViewModel>()
             InfoScreen(
-                navController = navController,
-                themeViewModel = themeViewModel,
+                viewModel = viewModel,
                 commonViewModel = commonViewModel
             )
         }
@@ -51,7 +48,8 @@ fun NavGraph(
         composable(
             route = Screen.Saved.route
         ) {
-            SavedScreen(navController = navController)
+            val viewModel = hiltViewModel<SavedViewModel>()
+            SavedScreen(navController = navController, viewModel = viewModel, commonViewModel = commonViewModel)
         }
     }
 }

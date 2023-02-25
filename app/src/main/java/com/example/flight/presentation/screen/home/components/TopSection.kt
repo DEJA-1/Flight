@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.flight.presentation.screen.common_components.Header
 import com.example.flight.presentation.viewModel.CommonViewModel
 import com.example.flight.presentation.screen.home.components.dialog.*
 import com.example.flight.presentation.viewModel.HomeViewModel
@@ -40,7 +41,8 @@ fun TopSection(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Header(
-                themeViewModel = themeViewModel
+                themeViewModel = themeViewModel,
+                isSwitch = true
             )
 
             Divider(

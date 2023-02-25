@@ -1,16 +1,16 @@
 package com.example.flight.presentation.screen.home.components
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +37,8 @@ import com.example.flight.util.convertTimeToHours
 fun FlightListSection(
     modifier: Modifier = Modifier,
     flightList: List<ItineraryModel>, // later list<Flight>
+    isSaved: Boolean,
+    onDeleteClick: (ItineraryModel) -> Unit = {},
     onFlightClick: (ItineraryModel) -> Unit
 ) {
 
@@ -46,7 +48,13 @@ fun FlightListSection(
             .padding(top = 4.dp)
     ) {
         items(flightList) { flight ->
-            FlightRow(flight = flight, modifier = Modifier, onFlightClick = onFlightClick)
+            FlightRow(
+                flight = flight,
+                modifier = Modifier,
+                isSaved = isSaved,
+                onDeleteClick = onDeleteClick,
+                onFlightClick = onFlightClick
+            )
         }
     }
 
@@ -57,8 +65,11 @@ fun FlightRow(
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
     flight: ItineraryModel,
+    isSaved: Boolean,
+    onDeleteClick: (ItineraryModel) -> Unit,
     onFlightClick: (ItineraryModel) -> Unit
 ) {
+
 
     Card(
         modifier = modifier
@@ -72,6 +83,7 @@ fun FlightRow(
         backgroundColor = MaterialTheme.colors.surface,
         elevation = 4.dp
     ) {
+
         Row(modifier = Modifier.fillMaxSize()) {
 
             Box(
@@ -91,6 +103,26 @@ fun FlightRow(
                     contentScale = ContentScale.FillBounds,
                     contentDescription = "airline Image"
                 )
+
+                if (isSaved) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .background(AppColors.mRed)
+                            .clickable {
+                                onDeleteClick(flight)
+                            }
+                            .align(Alignment.CenterStart),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            modifier = Modifier.padding(MaterialTheme.spacing.small),
+                            imageVector = Icons.Filled.Delete, contentDescription = "Delete icon",
+                            tint = MaterialTheme.colors.onBackground
+                        )
+                    }
+                }
             }
 
             Column() {
@@ -285,5 +317,9 @@ fun FlightRow(
 
             }
         }
+
     }
 }
+
+
+

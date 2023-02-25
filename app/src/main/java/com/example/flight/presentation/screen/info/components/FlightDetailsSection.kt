@@ -222,27 +222,32 @@ fun FlightDetailsSection(
                     }
                 )
 
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                        .clickable {
-                            onSaveClicked()
-                        },
-                    color = MaterialTheme.colors.primary,
-                    elevation = 4.dp,
-                    shape = RoundedCornerShape(18.dp)
-                ) {
-                    Text(
-                        modifier = Modifier.padding(MaterialTheme.spacing.small),
-                        fontWeight = FontWeight.Bold,
-                        text = "SAVE",
-                        textAlign = TextAlign.Center
-                    )
-                }
+                Button(onSaveClicked)
             }
 
         }
 
     }
 
+}
+
+@Composable
+private fun Button(onSaveClicked: () -> Unit) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth(0.5f)
+            .clickable {
+                onSaveClicked()
+            },
+        color = MaterialTheme.colors.primary,
+        elevation = 4.dp,
+        shape = RoundedCornerShape(18.dp)
+    ) {
+        Text(
+            modifier = Modifier.padding(MaterialTheme.spacing.small),
+            fontWeight = FontWeight.Bold,
+            text = "SAVE",
+            textAlign = TextAlign.Center
+        )
+    }
 }

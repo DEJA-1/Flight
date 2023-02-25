@@ -1,4 +1,4 @@
-package com.example.flight.presentation.screen.home.components
+package com.example.flight.presentation.screen.common_components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
@@ -13,12 +13,14 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
 
 @Composable
 fun Header(
-    themeViewModel: ThemeViewModel
+    themeViewModel: ThemeViewModel = viewModel(),
+    isSwitch: Boolean = false
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -33,9 +35,11 @@ fun Header(
             fontStyle = FontStyle.Italic,
             color = MaterialTheme.colors.onBackground
         )
-        CustomSwitch(isChecked = themeViewModel.isDarkTheme) {
-            themeViewModel.switchTheme()
-        }
+
+        if (isSwitch)
+            CustomSwitch(isChecked = themeViewModel.isDarkTheme) {
+                themeViewModel.switchTheme()
+            }
     }
 
 }

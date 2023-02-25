@@ -1,10 +1,10 @@
 package com.example.flight.presentation.screen.info
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,22 +13,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.flight.common.AppColors
-import com.example.flight.presentation.screen.home.components.Header
 import com.example.flight.presentation.screen.info.components.FlightDetailsSection
 import com.example.flight.presentation.screen.info.components.FlightInfoSection
 import com.example.flight.presentation.screen.info.components.dialog.stop.DialogStop
 import com.example.flight.presentation.viewModel.CommonViewModel
-import com.example.flight.presentation.viewModel.ThemeViewModel
+import com.example.flight.presentation.viewModel.InfoViewModel
 import com.example.flight.ui.theme.spacing
 
 @Composable
 fun InfoScreen(
-    navController: NavController,
-    themeViewModel: ThemeViewModel,
+    viewModel: InfoViewModel,
     commonViewModel: CommonViewModel
 ) {
 
@@ -36,6 +32,7 @@ fun InfoScreen(
     val isDialogOpen = remember {
         mutableStateOf(false)
     }
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -86,7 +83,8 @@ fun InfoScreen(
                     flight = flight,
                     commonViewModel = commonViewModel
                 ) {
-
+                    Toast.makeText(context, "Itinerary saved successfully", Toast.LENGTH_SHORT).show()
+                    viewModel.addItineraryToDb(commonViewModel.currentItinerary.value)
                 }
 
             }

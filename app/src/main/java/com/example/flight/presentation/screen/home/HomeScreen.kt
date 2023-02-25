@@ -1,20 +1,23 @@
 package com.example.flight.presentation.screen.home
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.flight.R
+import com.example.flight.common.AppColors
 import com.example.flight.domain.model.flight.ItineraryModel
 import com.example.flight.navigation.Screen
 import com.example.flight.presentation.screen.home.components.FlightListSection
@@ -22,6 +25,7 @@ import com.example.flight.presentation.screen.home.components.TopSection
 import com.example.flight.presentation.viewModel.CommonViewModel
 import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.presentation.viewModel.ThemeViewModel
+import com.example.flight.ui.theme.spacing
 import com.example.flight.util.convertTimeToHours
 import com.example.flight.util.filterFlights
 import com.example.flight.util.sortFlights
@@ -86,7 +90,8 @@ fun HomeScreen(
                         }
                     else {
                         FlightListSection(
-                            flightList = sortedAndFilteredFlights
+                            flightList = sortedAndFilteredFlights,
+                            isSaved = false
                         ) { itinerary ->
                             commonViewModel.updateCurrentItinerary(itinerary)
                             navController.navigate(Screen.Info.route)
@@ -96,6 +101,19 @@ fun HomeScreen(
 
 
             }
+        }
+
+        FloatingActionButton(
+            modifier = Modifier.align(Alignment.BottomEnd).padding(MaterialTheme.spacing.small),
+            onClick = { navController.navigate(Screen.Saved.route) },
+            backgroundColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.onBackground,
+            elevation = FloatingActionButtonDefaults.elevation(4.dp)
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.airplane),
+                contentDescription = "Airplane icon"
+            )
         }
     }
 }

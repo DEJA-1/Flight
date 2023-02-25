@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.flight.presentation.screen.common_components.DoneButton
-import com.example.flight.presentation.screen.home.components.CustomSwitch
+import com.example.flight.presentation.screen.common_components.CustomSwitch
 import com.example.flight.presentation.screen.home.components.ParamsSection
 import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.ui.theme.spacing

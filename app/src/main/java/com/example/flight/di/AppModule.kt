@@ -1,8 +1,13 @@
 package com.example.flight.di
 
+import android.app.Application
+import androidx.room.Room
 import com.example.flight.common.Constants
+import com.example.flight.data.database.FlightDatabase
 import com.example.flight.data.network.FlightApi
+import com.example.flight.data.repository.FlightDatabaseRepositoryImpl
 import com.example.flight.data.repository.FlightLocationRepositoryImpl
+import com.example.flight.domain.repository.FlightDatabaseRepository
 import com.example.flight.domain.repository.FlightLocationRepository
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
@@ -44,5 +49,21 @@ object AppModule {
     @Singleton
     fun provideFlightLocationRepository(api: FlightApi) : FlightLocationRepository {
         return FlightLocationRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFlightDatabase(app: Application): FlightDatabase {
+        return Room.databaseBuilder(
+            app,
+            FlightDatabase::class.java,
+            FlightDatabase.DATABASE_NAME
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFlightDatabaseRepository(db: FlightDatabase) : FlightDatabaseRepository {
+        return FlightDatabaseRepositoryImpl(db.flightDao)
     }
 }
