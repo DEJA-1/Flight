@@ -1,12 +1,11 @@
 package com.example.flight.util
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import com.example.flight.domain.model.FilterParams
+import com.example.flight.domain.model.FilterParametersState
 import com.example.flight.domain.model.flight.ItineraryModel
 
 fun filterFlights(
-    filterParams: FilterParams,
+    filterParams: FilterParametersState,
     data: List<ItineraryModel>?
 ): List<ItineraryModel>? {
 

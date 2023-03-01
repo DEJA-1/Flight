@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -15,20 +15,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.flight.domain.model.FilterParametersState
 import com.example.flight.presentation.screen.common_components.Header
 import com.example.flight.presentation.viewModel.CommonViewModel
 import com.example.flight.presentation.screen.home.components.dialog.*
 import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
+import com.example.flight.util.updateIsDialogOpen
 
 @Composable
 fun TopSection(
     themeViewModel: ThemeViewModel,
-    viewModel: HomeViewModel,
-    commonViewModel: CommonViewModel,
-    onParamsClicked: (String) -> Unit
+    filterParametersState: FilterParametersState,
+    onSliderValueChange: (Float) -> Unit,
+    onParamsClicked: (String) -> Unit,
 ) {
+
+    val isDialogOpen = remember {
+        mutableStateOf(false)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -76,11 +83,11 @@ fun TopSection(
         }
 
 
-        if (viewModel.isDialogOpen.value) {
+        if (isDialogOpen.value) {
             when (viewModel.selectedButtonName.value) {
                 "Departure" -> {
                     DialogCity(
-                        openDialog = viewModel.isDialogOpen,
+                        openDialog = isDialogOpen,
                         onDoneQuitClick = {
                             viewModel.isDialogOpen.value = false
                             viewModel.updateFlightSearch(cityDep = viewModel.location.value.cityCode.toString())
@@ -90,7 +97,7 @@ fun TopSection(
                 }
                 "Arrival" -> {
                     DialogCity(
-                        openDialog = viewModel.isDialogOpen,
+                        openDialog = isDialogOpen,
                         onDoneQuitClick = {
                             viewModel.isDialogOpen.value = false
                             viewModel.updateFlightSearch(cityArr = viewModel.location.value.cityCode.toString())
@@ -99,19 +106,19 @@ fun TopSection(
                     }
                 }
                 "Date" -> {
-                    DialogDate(openDialog = viewModel.isDialogOpen) { date ->
+                    DialogDate(openDialog = isDialogOpen) { date ->
                         viewModel.updateFlightSearch(date = date)
                     }
                 }
                 "Passengers" -> {
-                    DialogPassengers(openDialog = viewModel.isDialogOpen) {
+                    DialogPassengers(openDialog = isDialogOpen) {
                         viewModel.updateFlightSearch(pass = viewModel.passengers.value)
                         viewModel.isDialogOpen.value = false
                     }
                 }
                 "Sort by" -> {
                     DialogSort(
-                        openDialog = viewModel.isDialogOpen,
+                        openDialog = isDialogOpen,
                         selectedSort = viewModel.selectedSort,
                         onDoneQuitClick = { viewModel.isDialogOpen.value = false }
                     ) { sort ->
@@ -119,9 +126,12 @@ fun TopSection(
                     }
                 }
                 "Filter" -> {
-                    DialogFilter(openDialog = viewModel.isDialogOpen) {
-                        viewModel.isDialogOpen.value = false
-                    }
+                    DialogFilter(
+                        openDialog = isDialogOpen,
+                        filterParametersState = filterParametersState,
+                        onSliderValueChange = onSliderValueChange,
+                        onDoneQuitClick = { updateIsDialogOpen(isDialogOpen) }
+                    )
                 }
             }
         }
@@ -133,7 +143,7 @@ fun TopSection(
 @Composable
 private fun TopSectionBottom(
     viewModel: HomeViewModel,
-    onParamsClicked: (String) -> Unit
+    onParamsClicked: (String) -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxSize(),

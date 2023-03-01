@@ -1,8 +1,8 @@
 package com.example.flight.data.network
 
 import com.example.flight.BuildConfig
-import com.example.flight.data.network.response.flight.ApiResponse2
-import com.example.flight.domain.model.Location
+import com.example.flight.data.network.response.flight.ApiResponse
+import com.example.flight.data.network.response.location.LocationResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -11,7 +11,7 @@ interface FlightApi {
     suspend fun getLocations(
         @Query("rapidapi-key") apiKey: String = BuildConfig.API_KEY,
         @Query("name") name : String,
-    ) : List<Location>
+    ) : LocationResponse
 
     @GET(value = "v2/flight/departures")
     suspend fun getFlights(
@@ -22,6 +22,6 @@ interface FlightApi {
         @Query("origin_city_id") cityDep: String,
         @Query("destination_city_id") cityArr: String,
         @Query("number_of_itineraries") itinerariesCount: Int = 100
-    ) : ApiResponse2
+    ) : ApiResponse
 
 }

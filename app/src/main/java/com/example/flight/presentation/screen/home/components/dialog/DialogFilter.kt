@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.flight.domain.model.FilterParametersState
 import com.example.flight.presentation.screen.common_components.DoneButton
 import com.example.flight.presentation.screen.common_components.CustomSwitch
 import com.example.flight.presentation.screen.home.components.ParamsSection
@@ -28,12 +29,16 @@ import com.example.flight.ui.theme.spacing
 @Composable
 fun DialogFilter(
     openDialog: MutableState<Boolean>,
+    filterParametersState: FilterParametersState,
+    onSliderValueChange: (Float) -> Unit,
     onDoneQuitClick: () -> Unit,
 ) {
 
     if (openDialog.value) {
         Dialog(onDismissRequest = { openDialog.value = false }) {
             CustomDialogUiFilter(
+                filterParametersState = filterParametersState,
+                onSliderValueChange = onSliderValueChange,
                 onDoneQuitClick = onDoneQuitClick
             )
         }
@@ -42,17 +47,22 @@ fun DialogFilter(
 
 @Composable
 fun CustomDialogUiFilter(
+    filterParametersState: FilterParametersState,
+    onSliderValueChange: (Float) -> Unit,
     onDoneQuitClick: () -> Unit,
 ) {
     FilterDialogUi(
+        filterParametersState = filterParametersState,
+        onSliderValueChange = onSliderValueChange,
         onDoneQuitClick = onDoneQuitClick
     )
 }
 
 @Composable
 fun FilterDialogUi(
-    viewModel: HomeViewModel = hiltViewModel(),
-    onDoneQuitClick: () -> Unit
+    filterParametersState: FilterParametersState,
+    onSliderValueChange: (Float) -> Unit,
+    onDoneQuitClick: () -> Unit,
 ) {
 
     val isDoneEnabled = remember {
@@ -81,7 +91,10 @@ fun FilterDialogUi(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
-                SliderSection(viewModel = viewModel)
+                SliderSection(
+                    filterParameterMaxPrice = filterParametersState.maxPrice.toFloat(),
+                    onSliderValueChange = onSliderValueChange
+                )
 
                 Divider(
                     thickness = 2.dp,
@@ -93,7 +106,7 @@ fun FilterDialogUi(
                 )
 
                 DurationSection(
-                    viewModel = viewModel
+
                 )
 
                 Divider(
@@ -106,7 +119,7 @@ fun FilterDialogUi(
                 )
 
                 DisableSection(
-                    viewModel = viewModel
+
                 )
             }
         }
@@ -120,7 +133,7 @@ fun FilterDialogUi(
 
 @Composable
 fun DisableSection(
-    viewModel: HomeViewModel
+
 ) {
 
     val isChecked = remember {
@@ -152,7 +165,7 @@ fun DisableSection(
 
 @Composable
 fun DurationSection(
-    viewModel: HomeViewModel
+
 ) {
 
     val selectedButtonIndex = remember {
@@ -167,15 +180,16 @@ fun DurationSection(
         selectedButtonIndex.value = index
         viewModel.updateSelectedDurationFilter(name)
     }
-}
+}0
 
 @Composable
 fun SliderSection(
-    viewModel: HomeViewModel
+    filterParameterMaxPrice: Float,
+    onSliderValueChange: (Float) -> Unit
 ) {
 
     val sliderValue = remember {
-        mutableStateOf(viewModel.filterParams.value.maxPrice.value.toFloat())
+        mutableStateOf(filterParameterMaxPrice)
     }
 
     Slider(
@@ -183,7 +197,7 @@ fun SliderSection(
         value = sliderValue.value,
         onValueChange = { newValue ->
             sliderValue.value = newValue
-            viewModel.updateSliderValue(sliderValue.value)
+            onSliderValueChange(sliderValue.value)
         },
         valueRange = 0f..10000f
     )

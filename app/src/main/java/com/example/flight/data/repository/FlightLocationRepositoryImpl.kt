@@ -3,20 +3,21 @@ package com.example.flight.data.repository
 import android.util.Log
 import com.example.flight.common.Resource
 import com.example.flight.data.network.FlightApi
-import com.example.flight.data.network.response.flight.ApiResponse2
-import com.example.flight.domain.model.Location
+import com.example.flight.data.network.response.flight.ApiResponse
+import com.example.flight.data.network.response.location.LocationResponse
+import com.example.flight.domain.model.location.Location
 import com.example.flight.domain.repository.FlightLocationRepository
 
 class FlightLocationRepositoryImpl(
     private val api: FlightApi
 ) : FlightLocationRepository {
-    override suspend fun getLocation(name: String): Resource<List<Location>> {
+    override suspend fun getLocation(name: String): Resource<LocationResponse> {
         return try {
             Resource.Loading(true)
             val response = api.getLocations(name = name)
             Log.d("Response", response.toString())
 
-            if (response.first().cityName?.isNotEmpty() == true)
+            if (response.cityName?.isNotEmpty() == true)
                 Resource.Loading(false)
 
             Resource.Success(response)
@@ -25,13 +26,13 @@ class FlightLocationRepositoryImpl(
         }
     }
 
-    override suspend fun getFlights(date: String, cityDep: String, cityArr: String, passengers: Int): Resource<ApiResponse2> {
+    override suspend fun getFlights(date: String, cityDeparture: String, cityArrival: String, passengers: Int): Resource<ApiResponse> {
         return try {
             Resource.Loading(true)
             val response = api.getFlights(
                 date = date,
-                cityDep = cityDep,
-                cityArr = cityArr,
+                cityDep = cityDeparture,
+                cityArr = cityArrival,
                 passengers = passengers
             )
             Log.d("Response", response.toString())

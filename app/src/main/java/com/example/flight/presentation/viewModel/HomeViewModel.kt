@@ -1,28 +1,55 @@
 package com.example.flight.presentation.viewModel
 
+import android.text.TextUtils.replace
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flight.common.Resource
 import com.example.flight.data.network.response.flight.toResultsModel
-import com.example.flight.domain.model.FilterParams
-import com.example.flight.domain.model.FlightParams
-import com.example.flight.domain.model.Location
+import com.example.flight.domain.model.FilterParametersState
+import com.example.flight.domain.model.FlightSearchParametersState
+import com.example.flight.data.network.response.location.toLocation
 import com.example.flight.domain.model.flight.ResultsModel
+import com.example.flight.domain.model.location.Location
 import com.example.flight.domain.repository.FlightLocationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: FlightLocationRepository
 ) : ViewModel() {
+
+    private val _filterParametersState = MutableStateFlow(FilterParametersState())
+    val filterParametersState: StateFlow<FilterParametersState> = _filterParametersState
+
+    fun updateFilterMaxPrice(priceValueFromSlider: Float) {
+        _filterParametersState.update { filterParametersState ->
+            filterParametersState.copy(maxPrice = priceValueFromSlider.toInt())
+        }
+    }
+
+    fun updateFilterMaxDuration(selectedFilter: String) {
+        val maxDuration = selectedFilter.replace("<", "").replace("h", "").toInt()
+        _filterParametersState.update {filterParametersState ->
+            filterParametersState.copy(maxDuration = maxDuration)
+        }
+    }
+
+    fun updateFilterDisableNextDayArrivals(isDisabled: Boolean) {
+        _filterParametersState.update { filterParametersState ->
+            filterParametersState.copy(disableNextDayArrivals = isDisabled)
+        }
+    }
+
+
+    // ------------------------- OLD
 
     val buttonList = listOf("Departure", "Arrival", "Date", "Passengers")
     val buttonListFilter = listOf("Sort by", "Filter", "SAVE")
@@ -60,10 +87,10 @@ class HomeViewModel @Inject constructor(
     private val _selectedDurationFilter = mutableStateOf("")
     val selectedDurationFilter = _selectedDurationFilter
 
-    private val _flightSearch = mutableStateOf(FlightParams())
+    private val _flightSearch = mutableStateOf(FlightSearchParametersState())
     val flightSearch = _flightSearch
 
-    private val _filterParams = mutableStateOf(FilterParams())
+    private val _filterParams = mutableStateOf(FilterParametersState())
     val filterParams = _filterParams
 
     init {
@@ -104,17 +131,17 @@ class HomeViewModel @Inject constructor(
         _selectedSort.value = sort
     }
 
-    fun updateSelectedDurationFilter(filter: String) {
-        _filterParams.value.duration.value = filter.replace("<", "").replace("h", "").toInt()
-    }
-
-    fun updateDisableNextDayArrivalsFilter(isChecked: Boolean) {
-        _filterParams.value.disableNextDayArrivals.value = isChecked
-    }
-
-    fun updateSliderValue(value: Float) {
-        _filterParams.value.maxPrice.value = value.toInt()
-    }
+//    fun updateSelectedDurationFilter(filter: String) {
+//        _filterParams.value.duration.value = filter.replace("<", "").replace("h", "").toInt()
+//    }
+//
+//    fun updateDisableNextDayArrivalsFilter(isChecked: Boolean) {
+//        _filterParams.value.disableNextDayArrivals.value = isChecked
+//    }
+//
+//    fun updateSliderValue(value: Float) {
+//        _filterParams.value.maxPrice.value = value.toInt()
+//    }
 
     fun getLocation(name: String) =
         viewModelScope.launch(Dispatchers.IO) {
@@ -123,7 +150,7 @@ class HomeViewModel @Inject constructor(
 
             when (response) {
                 is Resource.Success -> {
-                    _location.value = response.data!!.first()
+                    _location.value = response.data!!.toLocation()
                     _loading.value = false
                 }
                 is Resource.Loading -> {

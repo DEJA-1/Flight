@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +38,10 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     commonViewModel: CommonViewModel,
 ) {
+
+    val filterParametersState by viewModel.filterParametersState.collectAsState()
+
+    // -------------- OLD
     val flights = viewModel.flightData.value.result?.itineraryData?.toModel()?.itineraries
     val criteria = viewModel.selectedSort.value
     val flightParams = viewModel.filterParams.value
@@ -57,8 +62,10 @@ fun HomeScreen(
         ) {
             TopSection(
                 themeViewModel = themeViewModel,
-                viewModel = viewModel,
-                commonViewModel = commonViewModel
+                filterParametersState = filterParametersState,
+                onSliderValueChange = { valueFromSlider ->
+                    viewModel.updateFilterMaxPrice(valueFromSlider)
+                }
             ) { name ->
                 if (name != "SAVE") {
                     viewModel.updateIsDialogOpen()
@@ -104,7 +111,9 @@ fun HomeScreen(
         }
 
         FloatingActionButton(
-            modifier = Modifier.align(Alignment.BottomEnd).padding(MaterialTheme.spacing.small),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(MaterialTheme.spacing.small),
             onClick = { navController.navigate(Screen.Saved.route) },
             backgroundColor = MaterialTheme.colors.primary,
             contentColor = MaterialTheme.colors.onBackground,
