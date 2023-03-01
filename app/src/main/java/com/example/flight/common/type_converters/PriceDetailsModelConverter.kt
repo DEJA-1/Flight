@@ -18,21 +18,4 @@ class PriceDetailsModelConverter {
         return Json.decodeFromString(json)
     }
 
-//    @TypeConverter
-//    fun fromString(value: String): PriceDetailsModel? {
-//        val parts = value.split(",")
-//        if (parts.size != 2) {
-//            return null
-//        }
-//        val totalPerTicket = parts[0].toDoubleOrNull() ?: return null
-//        val total = parts[1].toDoubleOrNull() ?: return null
-//        return PriceDetailsModel(totalPerTicket, total)
-//    }
-//
-//    @TypeConverter
-//    fun toString(priceDetailsModel: PriceDetailsModel?): String {
-//        return priceDetailsModel?.let {
-//            "${it.totalPerTicket},${it.total}"
-//        } ?: ""
-//    }
 }
