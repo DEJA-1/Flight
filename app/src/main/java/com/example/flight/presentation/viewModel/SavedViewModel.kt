@@ -26,7 +26,7 @@ class SavedViewModel @Inject constructor(
         getItinerariesFromDb()
     }
 
-    fun getItinerariesFromDb() =
+    private fun getItinerariesFromDb() =
         viewModelScope.launch() {
             repository.getAllItinerariesFromDb().collect() {
                 _itinerariesFromDb.value = it

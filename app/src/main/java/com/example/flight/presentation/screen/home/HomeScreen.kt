@@ -61,20 +61,32 @@ fun HomeScreen(
                 .fillMaxSize()
         ) {
             TopSection(
-                themeViewModel = themeViewModel,
                 filterParametersState = filterParametersState,
-                onSliderValueChange = { valueFromSlider ->
-                    viewModel.updateFilterMaxPrice(valueFromSlider)
-                }
-            ) { name ->
-                if (name != "SAVE") {
+                itineraryCount = viewModel.flightData.value.result?.itineraryCount ?: 0,
+                buttonNames = viewModel.buttonNames,
+                selectedButtonIndex = viewModel.selectedButtonIndex.value,
+                selectedButtonName = viewModel.selectedButtonName.value,
+                isThemeSwitchChecked = themeViewModel.isDarkTheme,
+                onDisableNextDayArrivalsClicked = { isDisabled -> viewModel.updateFilterDisableNextDayArrivals(isDisabled) },
+                onDurationButtonClicked = { buttonName -> viewModel.updateFilterMaxDuration(buttonName) },
+                onThemeSwitchClicked = { themeViewModel.switchTheme() },
+                onSliderValueChange = { valueFromSlider -> viewModel.updateFilterMaxPrice(valueFromSlider) },
+                onParamsUpperClicked = { buttonIndex, buttonName ->
+                    viewModel.updateSelectedButtonIndex(buttonIndex)
                     viewModel.updateIsDialogOpen()
-                    viewModel.updateSelectedButtonName(name)
-                } else {
-                    commonViewModel.updateCurrentFlightParams(viewModel.flightSearch.value)
-                    viewModel.getFlights()
+                    viewModel.updateSelectedButtonName(buttonName)
+                },
+                onParamsBottomClicked = { buttonName ->
+                    if (buttonName != "SAVE") {
+                        viewModel.updateIsDialogOpen()
+                        viewModel.updateSelectedButtonName(buttonName)
+                    } else {
+                        commonViewModel.updateCurrentFlightParams(viewModel.flightSearch.value)
+                        viewModel.getFlights()
+                    }
                 }
-            }
+            )
+
 
             when (viewModel.loadingFlights.collectAsState().value) {
                 true -> {

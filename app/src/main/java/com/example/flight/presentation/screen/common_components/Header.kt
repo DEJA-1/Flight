@@ -19,8 +19,9 @@ import com.example.flight.ui.theme.spacing
 
 @Composable
 fun Header(
-    themeViewModel: ThemeViewModel = viewModel(),
-    isSwitch: Boolean = false
+    isSwitchThemeButtonVisible: Boolean,
+    isChecked: MutableState<Boolean>,
+    onThemeSwitchClicked: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -36,9 +37,9 @@ fun Header(
             color = MaterialTheme.colors.onBackground
         )
 
-        if (isSwitch)
-            CustomSwitch(isChecked = themeViewModel.isDarkTheme) {
-                themeViewModel.switchTheme()
+        if (isSwitchThemeButtonVisible)
+            CustomSwitch(isChecked = isChecked) {
+                onThemeSwitchClicked()
             }
     }
 

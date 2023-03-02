@@ -29,6 +29,9 @@ class HomeViewModel @Inject constructor(
     private val _filterParametersState = MutableStateFlow(FilterParametersState())
     val filterParametersState: StateFlow<FilterParametersState> = _filterParametersState
 
+    private val _flightSearchParametersState = MutableStateFlow(FlightSearchParametersState())
+    val filterSearchParametersState: StateFlow<FlightSearchParametersState> = _flightSearchParametersState
+
     fun updateFilterMaxPrice(priceValueFromSlider: Float) {
         _filterParametersState.update { filterParametersState ->
             filterParametersState.copy(maxPrice = priceValueFromSlider.toInt())
@@ -48,11 +51,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private val _selectedButtonIndex = mutableStateOf(0)
+    val selectedButtonIndex = _selectedButtonIndex
 
     // ------------------------- OLD
 
-    val buttonList = listOf("Departure", "Arrival", "Date", "Passengers")
-    val buttonListFilter = listOf("Sort by", "Filter", "SAVE")
+    val buttonNames = listOf("Departure", "Arrival", "Date", "Passengers")
+    val buttonNamesFiltration = listOf("Sort by", "Filter", "SAVE")
 
     private val _location = mutableStateOf(Location())
     val location = _location
@@ -72,8 +77,7 @@ class HomeViewModel @Inject constructor(
     private val _error = mutableStateOf("")
     val error = _error
 
-    private val _selectedButtonIndex = mutableStateOf(0)
-    val selectedButtonIndex = _selectedButtonIndex
+
 
     private val _isDialogOpen = mutableStateOf(false)
     val isDialogOpen = _isDialogOpen

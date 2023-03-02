@@ -26,10 +26,18 @@ import com.example.flight.util.updateIsDialogOpen
 
 @Composable
 fun TopSection(
-    themeViewModel: ThemeViewModel,
     filterParametersState: FilterParametersState,
+    isThemeSwitchChecked: MutableState<Boolean>,
+    buttonNames: List<String>,
+    selectedButtonIndex: Int,
+    selectedButtonName: String,
+    itineraryCount: Int,
+    onDisableNextDayArrivalsClicked: (Boolean) -> Unit,
+    onDurationButtonClicked: (String) -> Unit,
+    onThemeSwitchClicked: () -> Unit,
     onSliderValueChange: (Float) -> Unit,
-    onParamsClicked: (String) -> Unit,
+    onParamsUpperClicked: (Int, String) -> Unit,
+    onParamsBottomClicked: (String) -> Unit,
 ) {
 
     val isDialogOpen = remember {
@@ -48,8 +56,9 @@ fun TopSection(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Header(
-                themeViewModel = themeViewModel,
-                isSwitch = true
+                isChecked = isThemeSwitchChecked,
+                isSwitchThemeButtonVisible = true,
+                onThemeSwitchClicked = { onThemeSwitchClicked() }
             )
 
             Divider(
@@ -62,12 +71,13 @@ fun TopSection(
 
             ParamsSection(
                 isFilter = false,
-                buttonList = viewModel.buttonList,
-                selectedButtonIndex = viewModel.selectedButtonIndex
-            ) { index, name ->
-                viewModel.updateSelectedButtonIndex(index)
-                viewModel.updateIsDialogOpen()
-                viewModel.updateSelectedButtonName(name)
+                buttonNames = buttonNames,
+                selectedButtonIndex = selectedButtonIndex
+            ) { buttonIndex, buttonName ->
+                onParamsUpperClicked(buttonIndex, buttonName)
+//                viewModel.updateSelectedButtonIndex(index)
+//                viewModel.updateIsDialogOpen()
+//                viewModel.updateSelectedButtonName(name)
             }
 
             Box(
@@ -75,31 +85,33 @@ fun TopSection(
                 contentAlignment = Alignment.BottomStart
             ) {
 
-                TopSectionBottom(viewModel) { name ->
-                    onParamsClicked(name)
-                }
+                TopSectionBottom(
+                    itineraryCount = itineraryCount,
+                    buttonNames = buttonNames,
+                    selectedButtonIndex = selectedButtonIndex,
+                    onParamsBottomClicked = { buttonName -> onParamsBottomClicked(buttonName) }
+                )
 
             }
         }
 
 
         if (isDialogOpen.value) {
-            when (viewModel.selectedButtonName.value) {
+            when (selectedButtonName) {
                 "Departure" -> {
                     DialogCity(
                         openDialog = isDialogOpen,
                         onDoneQuitClick = {
-                            viewModel.isDialogOpen.value = false
+                            isDialogOpen.value = false
                             viewModel.updateFlightSearch(cityDep = viewModel.location.value.cityCode.toString())
-                        }) { city ->
-                        viewModel.getLocation(city)
-                    }
+                        },
+                        onDoneClick = { city -> viewModel.getLocation(city) })
                 }
                 "Arrival" -> {
                     DialogCity(
                         openDialog = isDialogOpen,
                         onDoneQuitClick = {
-                            viewModel.isDialogOpen.value = false
+                            isDialogOpen.value = false
                             viewModel.updateFlightSearch(cityArr = viewModel.location.value.cityCode.toString())
                         }) { city ->
                         viewModel.getLocation(city)
@@ -112,15 +124,15 @@ fun TopSection(
                 }
                 "Passengers" -> {
                     DialogPassengers(openDialog = isDialogOpen) {
+                        isDialogOpen.value = false
                         viewModel.updateFlightSearch(pass = viewModel.passengers.value)
-                        viewModel.isDialogOpen.value = false
                     }
                 }
                 "Sort by" -> {
                     DialogSort(
                         openDialog = isDialogOpen,
                         selectedSort = viewModel.selectedSort,
-                        onDoneQuitClick = { viewModel.isDialogOpen.value = false }
+                        onDoneQuitClick = { isDialogOpen.value = false }
                     ) { sort ->
                         viewModel.updateSelectedSort(sort)
                     }
@@ -129,7 +141,9 @@ fun TopSection(
                     DialogFilter(
                         openDialog = isDialogOpen,
                         filterParametersState = filterParametersState,
+                        onDisableNextDayArrivalsClicked = onDisableNextDayArrivalsClicked,
                         onSliderValueChange = onSliderValueChange,
+                        onDurationButtonClicked = onDurationButtonClicked,
                         onDoneQuitClick = { updateIsDialogOpen(isDialogOpen) }
                     )
                 }
@@ -142,8 +156,10 @@ fun TopSection(
 
 @Composable
 private fun TopSectionBottom(
-    viewModel: HomeViewModel,
-    onParamsClicked: (String) -> Unit,
+    itineraryCount: Int,
+    buttonNames: List<String>,
+    selectedButtonIndex: Int,
+    onParamsBottomClicked: (String) -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxSize(),
@@ -159,7 +175,7 @@ private fun TopSectionBottom(
                         fontSize = 32.sp
                     )
                 ) {
-                    append("${viewModel.flightData.value.result?.itineraryCount} ") //number of flights after retrofit call
+                    append("$itineraryCount ") //number of flights after retrofit call
                 }
 
                 withStyle(
@@ -177,12 +193,10 @@ private fun TopSectionBottom(
         ParamsSection(
             isFilter = true,
             modifier = Modifier.padding(top = 10.dp, bottom = 0.dp, end = 0.dp),
-            buttonList = viewModel.buttonListFilter,
-            selectedButtonIndex = viewModel.selectedButtonIndex
-        ) { index, name ->
-
-            onParamsClicked(name)
-
+            buttonNames = buttonNames,
+            selectedButtonIndex = selectedButtonIndex
+        ) { _, name ->
+            onParamsBottomClicked(name)
         }
 
     }

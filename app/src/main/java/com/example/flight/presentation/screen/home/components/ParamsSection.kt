@@ -24,29 +24,28 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ParamsSection(
     modifier: Modifier = Modifier,
-    buttonList: List<String>,
+    buttonNames: List<String>,
     isFilter: Boolean,
-    isExpanded: MutableState<Boolean> = mutableStateOf(false),
-    selectedButtonIndex: MutableState<Int>,
+    selectedButtonIndex: Int,
     onButtonClick: (Int, String) -> Unit,
 ) {
     LazyRow() {
-        items(buttonList.size) { index ->
+        items(buttonNames.size) { index ->
             Box(
                 modifier = modifier
                     .padding(top = 10.dp, end = 8.dp)
                     .clip(RoundedCornerShape(18.dp))
                     .clickable {
-                        onButtonClick(index, buttonList[index])
+                        onButtonClick(index, buttonNames[index])
 //                            if (buttonList[index] == "Sort by")
 //                                isExpanded.value = !isExpanded.value
                     }
                     .border(
                         width = 2.dp, shape = RoundedCornerShape(18.dp),
-                        color = if (selectedButtonIndex.value == index && !isFilter)
+                        color = if (selectedButtonIndex == index && !isFilter)
                             MaterialTheme.colors.primary
                         else
-                            if (buttonList[index] == "SAVE")
+                            if (buttonNames[index] == "SAVE")
                                 MaterialTheme.colors.primary
                             else
                                 MaterialTheme.colors.secondary
@@ -55,7 +54,7 @@ fun ParamsSection(
                         if (!isFilter)
                             MaterialTheme.colors.surface
                         else
-                            if (buttonList[index] == "SAVE")
+                            if (buttonNames[index] == "SAVE")
                                 MaterialTheme.colors.primary
                             else
                                 MaterialTheme.colors.background
@@ -65,7 +64,7 @@ fun ParamsSection(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = buttonList[index],
+                    text = buttonNames[index],
                     color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.Bold
                 )

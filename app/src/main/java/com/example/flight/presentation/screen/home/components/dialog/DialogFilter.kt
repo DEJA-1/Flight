@@ -30,6 +30,8 @@ import com.example.flight.ui.theme.spacing
 fun DialogFilter(
     openDialog: MutableState<Boolean>,
     filterParametersState: FilterParametersState,
+    onDisableNextDayArrivalsClicked: (Boolean) -> Unit,
+    onDurationButtonClicked: (String) -> Unit,
     onSliderValueChange: (Float) -> Unit,
     onDoneQuitClick: () -> Unit,
 ) {
@@ -38,6 +40,8 @@ fun DialogFilter(
         Dialog(onDismissRequest = { openDialog.value = false }) {
             CustomDialogUiFilter(
                 filterParametersState = filterParametersState,
+                onDisableNextDayArrivalsClicked = onDisableNextDayArrivalsClicked,
+                onDurationButtonClicked = onDurationButtonClicked,
                 onSliderValueChange = onSliderValueChange,
                 onDoneQuitClick = onDoneQuitClick
             )
@@ -48,11 +52,15 @@ fun DialogFilter(
 @Composable
 fun CustomDialogUiFilter(
     filterParametersState: FilterParametersState,
+    onDisableNextDayArrivalsClicked: (Boolean) -> Unit,
+    onDurationButtonClicked: (String) -> Unit,
     onSliderValueChange: (Float) -> Unit,
     onDoneQuitClick: () -> Unit,
 ) {
     FilterDialogUi(
         filterParametersState = filterParametersState,
+        onDisableNextDayArrivalsClicked = onDisableNextDayArrivalsClicked,
+        onDurationButtonClicked = onDurationButtonClicked,
         onSliderValueChange = onSliderValueChange,
         onDoneQuitClick = onDoneQuitClick
     )
@@ -61,6 +69,8 @@ fun CustomDialogUiFilter(
 @Composable
 fun FilterDialogUi(
     filterParametersState: FilterParametersState,
+    onDisableNextDayArrivalsClicked: (Boolean) -> Unit,
+    onDurationButtonClicked: (String) -> Unit,
     onSliderValueChange: (Float) -> Unit,
     onDoneQuitClick: () -> Unit,
 ) {
@@ -106,7 +116,7 @@ fun FilterDialogUi(
                 )
 
                 DurationSection(
-
+                    onDurationButtonClicked = { buttonName -> onDurationButtonClicked(buttonName) }
                 )
 
                 Divider(
@@ -119,7 +129,8 @@ fun FilterDialogUi(
                 )
 
                 DisableSection(
-
+                    isDisableNextDayArrivalsChecked = filterParametersState.disableNextDayArrivals,
+                    onDisableNextDayArrivalsClicked = onDisableNextDayArrivalsClicked
                 )
             }
         }
@@ -133,11 +144,12 @@ fun FilterDialogUi(
 
 @Composable
 fun DisableSection(
-
+    isDisableNextDayArrivalsChecked: Boolean,
+    onDisableNextDayArrivalsClicked: (Boolean) -> Unit
 ) {
 
     val isChecked = remember {
-        mutableStateOf(viewModel.filterParams.value.disableNextDayArrivals.value)
+        mutableStateOf(isDisableNextDayArrivalsChecked)
     }
 
     Row(horizontalArrangement = Arrangement.SpaceBetween) {
@@ -156,7 +168,8 @@ fun DisableSection(
 
         CustomSwitch(isChecked = isChecked) {
             isChecked.value = !isChecked.value
-            viewModel.updateDisableNextDayArrivalsFilter(isChecked.value)
+            onDisableNextDayArrivalsClicked(isChecked.value)
+//            viewModel.updateDisableNextDayArrivalsFilter(isChecked.value)
         }
 
     }
@@ -165,7 +178,7 @@ fun DisableSection(
 
 @Composable
 fun DurationSection(
-
+    onDurationButtonClicked: (String) -> Unit
 ) {
 
     val selectedButtonIndex = remember {
@@ -173,14 +186,15 @@ fun DurationSection(
     }
 
     ParamsSection(
-        buttonList = listOf("<5h", "<15h", "<30h", "<50h"),
+        buttonNames = listOf("<5h", "<15h", "<30h", "<50h"),
         isFilter = false,
-        selectedButtonIndex = selectedButtonIndex,
-    ) { index, name ->
+        selectedButtonIndex = selectedButtonIndex.value,
+    ) { index, buttonName ->
         selectedButtonIndex.value = index
-        viewModel.updateSelectedDurationFilter(name)
+        onDurationButtonClicked(buttonName)
+//        viewModel.updateSelectedDurationFilter(name)
     }
-}0
+}
 
 @Composable
 fun SliderSection(
