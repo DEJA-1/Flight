@@ -11,19 +11,19 @@ fun filterFlights(
 
     Log.d("TEST", filterParams.toString())
 
-    if (filterParams.disableNextDayArrivals.value) {
+    if (filterParams.disableNextDayArrivals) {
         return data?.filter {
-            it.priceDetails?.totalPerTicket?.toInt()!! < filterParams.maxPrice.value
-                    && convertTimeToHours(it.sliceData!!.slice.info.duration) <= filterParams.duration.value
+            it.priceDetails?.totalPerTicket?.toInt()!! < filterParams.maxPrice
+                    && convertTimeToHours(it.sliceData!!.slice.info.duration) <= filterParams.maxDuration
                     && checkIfArrivesNextDay(
                 it.sliceData.slice.departure.datetime.date,
                 it.sliceData.slice.arrival.datetime.date
-            ) != filterParams.disableNextDayArrivals.value
+            ) != filterParams.disableNextDayArrivals
         }
     } else {
         return data?.filter {
-            it.priceDetails?.totalPerTicket?.toInt()!! < filterParams.maxPrice.value
-                    && convertTimeToHours(it.sliceData!!.slice.info.duration) <= filterParams.duration.value
+            it.priceDetails?.totalPerTicket?.toInt()!! < filterParams.maxPrice
+                    && convertTimeToHours(it.sliceData!!.slice.info.duration) <= filterParams.maxDuration
         }
 
 

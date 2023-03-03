@@ -16,12 +16,14 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun DialogDate(
     openDialog: MutableState<Boolean>,
-    onDatePicked: (String) -> Unit
+    onCancelDateClicked: () -> Unit,
+    onDatePicked: (String) -> Unit,
 ) {
 
     if (openDialog.value) {
         Dialog(onDismissRequest = { openDialog.value = false }) {
             CustomDialogUiDate(
+                onCancelDateClicked = onCancelDateClicked,
                 onDatePicked = onDatePicked
             )
         }
@@ -30,15 +32,19 @@ fun DialogDate(
 
 @Composable
 fun CustomDialogUiDate(
-    onDatePicked: (String) -> Unit
+    onCancelDateClicked: () -> Unit,
+    onDatePicked: (String) -> Unit,
 ) {
-    DialogDatePicker(onDatePicked = onDatePicked)
+    DialogDatePicker(
+        onCancelDateClicked = onCancelDateClicked,
+        onDatePicked = onDatePicked
+    )
 }
 
 @Composable
 fun DialogDatePicker(
-    viewModel: HomeViewModel = hiltViewModel(),
-    onDatePicked: (String) -> Unit
+    onCancelDateClicked: () -> Unit,
+    onDatePicked: (String) -> Unit,
 ) {
     val dateDialogState = rememberMaterialDialogState()
     val pickedDate = remember {
@@ -62,10 +68,9 @@ fun DialogDatePicker(
         buttons = {
             positiveButton(text = "Ok") {
                 onDatePicked(formattedDate.value)
-                viewModel.updateIsDialogOpen()
             }
             negativeButton(text = "Cancel") {
-                viewModel.updateIsDialogOpen()
+                onCancelDateClicked()
             }
         }
     ) {

@@ -2,11 +2,13 @@ package com.example.flight.presentation.viewModel
 
 import android.text.TextUtils.replace
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flight.common.Resource
 import com.example.flight.data.network.response.flight.toResultsModel
+import com.example.flight.data.network.response.location.LocationResponse
 import com.example.flight.domain.model.FilterParametersState
 import com.example.flight.domain.model.FlightSearchParametersState
 import com.example.flight.data.network.response.location.toLocation
@@ -30,7 +32,7 @@ class HomeViewModel @Inject constructor(
     val filterParametersState: StateFlow<FilterParametersState> = _filterParametersState
 
     private val _flightSearchParametersState = MutableStateFlow(FlightSearchParametersState())
-    val filterSearchParametersState: StateFlow<FlightSearchParametersState> = _flightSearchParametersState
+    val flightSearchParametersState: StateFlow<FlightSearchParametersState> = _flightSearchParametersState
 
     fun updateFilterMaxPrice(priceValueFromSlider: Float) {
         _filterParametersState.update { filterParametersState ->
@@ -51,16 +53,41 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun updateFlightSearchCityDeparture(city: String) {
+        _flightSearchParametersState.update {  flightSearchParametersState ->
+            flightSearchParametersState.copy(locationDeparture = city)
+        }
+        Log.d("flightSearchParameters: ", _flightSearchParametersState.value.toString())
+    }
+
+    fun updateFlightSearchCityArrival(city: String) {
+        _flightSearchParametersState.update { flightSearchParametersState ->
+            flightSearchParametersState.copy(locationArrival = city)
+        }
+    }
+
+    fun updateFlightSearchDepartureTime(date: String) {
+        _flightSearchParametersState.update { flightSearchParametersState ->
+            flightSearchParametersState.copy(departureTime = date)
+        }
+    }
+
+    fun updateFlightSearchPassengersCount(passengers: Int) {
+        _flightSearchParametersState.update { flightSearchParametersState ->
+            flightSearchParametersState.copy(passengers = passengers)
+        }
+    }
+
     private val _selectedButtonIndex = mutableStateOf(0)
     val selectedButtonIndex = _selectedButtonIndex
 
     // ------------------------- OLD
 
     val buttonNames = listOf("Departure", "Arrival", "Date", "Passengers")
-    val buttonNamesFiltration = listOf("Sort by", "Filter", "SAVE")
+    val buttonNamesFilters = listOf("Sort by", "Filter", "SAVE")
 
-    private val _location = mutableStateOf(Location())
-    val location = _location
+    private val _location = mutableStateOf(LocationResponse())
+    val location: State<LocationResponse> = _location
 
     private val _flightData = mutableStateOf(ResultsModel())
     val flightData = _flightData
@@ -71,16 +98,12 @@ class HomeViewModel @Inject constructor(
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
+    private val _error = mutableStateOf("")
+    val error: State<String> = _error
+
     private val _loadingFlights = MutableStateFlow(false)
     val loadingFlights = _loadingFlights.asStateFlow()
 
-    private val _error = mutableStateOf("")
-    val error = _error
-
-
-
-    private val _isDialogOpen = mutableStateOf(false)
-    val isDialogOpen = _isDialogOpen
 
     private val _selectedButtonName = mutableStateOf("")
     val selectedButtonName = _selectedButtonName
@@ -88,8 +111,6 @@ class HomeViewModel @Inject constructor(
     private val _selectedSort = mutableStateOf("")
     val selectedSort = _selectedSort
 
-    private val _selectedDurationFilter = mutableStateOf("")
-    val selectedDurationFilter = _selectedDurationFilter
 
     private val _flightSearch = mutableStateOf(FlightSearchParametersState())
     val flightSearch = _flightSearch
@@ -101,32 +122,10 @@ class HomeViewModel @Inject constructor(
         getFlights()
     }
 
-    fun updateFlightSearch(
-        cityDep: String = "", cityArr: String = "", date: String = "", pass: Int = 0
-    ) {
-        if (cityDep != "")
-            _flightSearch.value.locationDeparture = cityDep
-        if (cityArr != "")
-            _flightSearch.value.locationArrival = cityArr
-        if (date != "")
-            _flightSearch.value.departureTime = date
-        if (pass != 0)
-            _flightSearch.value.passengers = pass
-        Log.d("TEST", flightSearch.value.toString())
-    }
 
     fun updateSelectedButtonName(name: String) {
         _selectedButtonName.value = name
     }
-
-    fun updatePassengers(passengers: Int) {
-        _passengers.value = passengers
-    }
-
-    fun updateIsDialogOpen() {
-        _isDialogOpen.value = !_isDialogOpen.value
-    }
-
     fun updateSelectedButtonIndex(index: Int) {
         _selectedButtonIndex.value = index
     }
@@ -135,17 +134,9 @@ class HomeViewModel @Inject constructor(
         _selectedSort.value = sort
     }
 
-//    fun updateSelectedDurationFilter(filter: String) {
-//        _filterParams.value.duration.value = filter.replace("<", "").replace("h", "").toInt()
-//    }
-//
-//    fun updateDisableNextDayArrivalsFilter(isChecked: Boolean) {
-//        _filterParams.value.disableNextDayArrivals.value = isChecked
-//    }
-//
-//    fun updateSliderValue(value: Float) {
-//        _filterParams.value.maxPrice.value = value.toInt()
-//    }
+    fun resetErrorMessageValue() {
+        _error.value = ""
+    }
 
     fun getLocation(name: String) =
         viewModelScope.launch(Dispatchers.IO) {
@@ -154,7 +145,7 @@ class HomeViewModel @Inject constructor(
 
             when (response) {
                 is Resource.Success -> {
-                    _location.value = response.data!!.toLocation()
+                    _location.value = response.data!!.first()
                     _loading.value = false
                 }
                 is Resource.Loading -> {
@@ -168,25 +159,25 @@ class HomeViewModel @Inject constructor(
             }
         }
 
-    fun getFlights(date: String = flightSearch.value.departureTime,
-        cityDep: String = flightSearch.value.locationDeparture ?: "WAW",
-        cityArr: String = flightSearch.value.locationArrival ?: "PAR",
-        passengers: Int = flightSearch.value.passengers
+    fun getFlights(date: String = _flightSearchParametersState.value.departureTime,
+        cityDep: String = _flightSearchParametersState.value.locationDeparture ?: "WAW",
+        cityArr: String = _flightSearchParametersState.value.locationArrival ?: "PAR",
+        passengers: Int = _flightSearchParametersState.value.passengers
     ) = viewModelScope.launch(Dispatchers.IO) {
         _loadingFlights.value = true
         val response = repository.getFlights(date, cityDep, cityArr, passengers)
 
         when (response) {
             is Resource.Success -> {
-                _flightData.value = response.data!!.getAirFlightDepartures?.results?.toResultsModel()!!
+                _flightData.value = response.data!!.getAirFlightDepartures.results.toResultsModel()
                 _loadingFlights.value = false
             }
             is Resource.Loading -> {
                 _loadingFlights.value = false
             }
             is Resource.Error -> {
+                _error.value = response.message.toString()
                 Log.d("ErrorFlight", response.message.toString())
-
                 _loadingFlights.value = false
             }
         }

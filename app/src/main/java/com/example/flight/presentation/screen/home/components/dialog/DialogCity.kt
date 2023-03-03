@@ -35,10 +35,13 @@ import java.util.*
 @Composable
 fun DialogCity(
     openDialog: MutableState<Boolean>,
-    text: MutableState<String> = mutableStateOf(""),
     onDoneQuitClick: () -> Unit,
     onDoneClick: (String) -> Unit
 ) {
+
+    val text = remember {
+        mutableStateOf("")
+    }
 
     if (openDialog.value) {
         Dialog(onDismissRequest = { openDialog.value = false }) {

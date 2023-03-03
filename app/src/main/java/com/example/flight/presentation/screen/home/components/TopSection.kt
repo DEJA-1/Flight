@@ -16,6 +16,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.flight.domain.model.FilterParametersState
+import com.example.flight.domain.model.FlightSearchParametersState
 import com.example.flight.presentation.screen.common_components.Header
 import com.example.flight.presentation.viewModel.CommonViewModel
 import com.example.flight.presentation.screen.home.components.dialog.*
@@ -27,11 +28,21 @@ import com.example.flight.util.updateIsDialogOpen
 @Composable
 fun TopSection(
     filterParametersState: FilterParametersState,
+    flightSearchParametersState: FlightSearchParametersState,
     isThemeSwitchChecked: MutableState<Boolean>,
     buttonNames: List<String>,
+    buttonNamesFilters: List<String>,
     selectedButtonIndex: Int,
     selectedButtonName: String,
     itineraryCount: Int,
+    selectedSort: String,
+    updateSelectedSort: (String) -> Unit,
+    getLocation: (String) -> Unit,
+    locationCode: String,
+    updateFlightSearchPassengersCount: (Int) -> Unit,
+    updateFlightSearchDepartureTime: (String) -> Unit,
+    updateFlightSearchCityDeparture: () -> Unit,
+    updateFlightSearchCityArrival: () -> Unit,
     onDisableNextDayArrivalsClicked: (Boolean) -> Unit,
     onDurationButtonClicked: (String) -> Unit,
     onThemeSwitchClicked: () -> Unit,
@@ -75,9 +86,7 @@ fun TopSection(
                 selectedButtonIndex = selectedButtonIndex
             ) { buttonIndex, buttonName ->
                 onParamsUpperClicked(buttonIndex, buttonName)
-//                viewModel.updateSelectedButtonIndex(index)
-//                viewModel.updateIsDialogOpen()
-//                viewModel.updateSelectedButtonName(name)
+                updateIsDialogOpen(isDialogOpen)
             }
 
             Box(
@@ -87,7 +96,8 @@ fun TopSection(
 
                 TopSectionBottom(
                     itineraryCount = itineraryCount,
-                    buttonNames = buttonNames,
+                    buttonNames = buttonNamesFilters,
+                    isDialogOpen = isDialogOpen,
                     selectedButtonIndex = selectedButtonIndex,
                     onParamsBottomClicked = { buttonName -> onParamsBottomClicked(buttonName) }
                 )
@@ -102,40 +112,46 @@ fun TopSection(
                     DialogCity(
                         openDialog = isDialogOpen,
                         onDoneQuitClick = {
-                            isDialogOpen.value = false
-                            viewModel.updateFlightSearch(cityDep = viewModel.location.value.cityCode.toString())
+                            updateFlightSearchCityDeparture()
+                            updateIsDialogOpen(isDialogOpen)
                         },
-                        onDoneClick = { city -> viewModel.getLocation(city) })
+                        onDoneClick = { city -> getLocation(city) })
                 }
                 "Arrival" -> {
                     DialogCity(
                         openDialog = isDialogOpen,
                         onDoneQuitClick = {
-                            isDialogOpen.value = false
-                            viewModel.updateFlightSearch(cityArr = viewModel.location.value.cityCode.toString())
-                        }) { city ->
-                        viewModel.getLocation(city)
-                    }
+                            updateIsDialogOpen(isDialogOpen)
+                            updateFlightSearchCityArrival()
+                        },
+                        onDoneClick = { city -> getLocation(city) })
                 }
                 "Date" -> {
-                    DialogDate(openDialog = isDialogOpen) { date ->
-                        viewModel.updateFlightSearch(date = date)
-                    }
+                    DialogDate(
+                        openDialog = isDialogOpen,
+                        onCancelDateClicked = { isDialogOpen.value = false },
+                        onDatePicked = { date ->
+                            updateFlightSearchDepartureTime(date)
+                            updateIsDialogOpen(isDialogOpen)
+                        }
+                    )
                 }
                 "Passengers" -> {
-                    DialogPassengers(openDialog = isDialogOpen) {
-                        isDialogOpen.value = false
-                        viewModel.updateFlightSearch(pass = viewModel.passengers.value)
-                    }
+                    DialogPassengers(openDialog = isDialogOpen,
+                        onDoneQuitClick = {
+                            updateIsDialogOpen(isDialogOpen)
+                        },
+                        onPassengerButtonClicked = { passengersCount ->
+                            updateFlightSearchPassengersCount(passengersCount)
+                        })
                 }
                 "Sort by" -> {
                     DialogSort(
                         openDialog = isDialogOpen,
-                        selectedSort = viewModel.selectedSort,
-                        onDoneQuitClick = { isDialogOpen.value = false }
-                    ) { sort ->
-                        viewModel.updateSelectedSort(sort)
-                    }
+                        selectedSort = selectedSort,
+                        onDoneQuitClick = { updateIsDialogOpen(isDialogOpen) },
+                        onSortClick = { sortName -> updateSelectedSort(sortName) }
+                    )
                 }
                 "Filter" -> {
                     DialogFilter(
@@ -157,6 +173,7 @@ fun TopSection(
 @Composable
 private fun TopSectionBottom(
     itineraryCount: Int,
+    isDialogOpen: MutableState<Boolean>,
     buttonNames: List<String>,
     selectedButtonIndex: Int,
     onParamsBottomClicked: (String) -> Unit,
@@ -195,8 +212,10 @@ private fun TopSectionBottom(
             modifier = Modifier.padding(top = 10.dp, bottom = 0.dp, end = 0.dp),
             buttonNames = buttonNames,
             selectedButtonIndex = selectedButtonIndex
-        ) { _, name ->
-            onParamsBottomClicked(name)
+        ) { _, buttonName ->
+            onParamsBottomClicked(buttonName)
+            if (buttonName != "SAVE")
+                updateIsDialogOpen(isDialogOpen)
         }
 
     }

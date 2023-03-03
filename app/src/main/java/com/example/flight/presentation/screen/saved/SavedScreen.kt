@@ -48,7 +48,9 @@ fun SavedScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Header()
+            Header(
+                isSwitchThemeButtonVisible = false,
+            )
 
             MyDivider()
 

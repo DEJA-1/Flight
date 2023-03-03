@@ -1,7 +1,6 @@
 package com.example.flight.presentation.screen.home.components
 
 import android.content.Context
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -36,7 +35,7 @@ import com.example.flight.util.convertTimeToHours
 @Composable
 fun FlightListSection(
     modifier: Modifier = Modifier,
-    flightList: List<ItineraryModel>, // later list<Flight>
+    flightList: List<ItineraryModel>,
     isSaved: Boolean,
     onDeleteClick: (ItineraryModel) -> Unit = {},
     onFlightClick: (ItineraryModel) -> Unit
@@ -49,7 +48,7 @@ fun FlightListSection(
     ) {
         items(flightList) { flight ->
             FlightRow(
-                flight = flight,
+                itinerary = flight,
                 modifier = Modifier,
                 isSaved = isSaved,
                 onDeleteClick = onDeleteClick,
@@ -64,7 +63,7 @@ fun FlightListSection(
 fun FlightRow(
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
-    flight: ItineraryModel,
+    itinerary: ItineraryModel,
     isSaved: Boolean,
     onDeleteClick: (ItineraryModel) -> Unit,
     onFlightClick: (ItineraryModel) -> Unit
@@ -77,7 +76,7 @@ fun FlightRow(
             .height(100.dp)
             .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
             .clickable {
-                onFlightClick(flight)
+                onFlightClick(itinerary)
             },
         shape = RoundedCornerShape(6.dp),
         backgroundColor = MaterialTheme.colors.surface,
@@ -97,7 +96,7 @@ fun FlightRow(
                 AsyncImage(
                     modifier = Modifier.fillMaxSize(),
                     model = ImageRequest.Builder(context)
-                        .data(flight.sliceData!!.slice.airline.logo)
+                        .data(itinerary.sliceData!!.slice.airline.logo)
                         .crossfade(true)
                         .build(),
                     contentScale = ContentScale.FillBounds,
@@ -110,7 +109,7 @@ fun FlightRow(
                             .fillMaxHeight()
                             .background(AppColors.mRed)
                             .clickable {
-                                onDeleteClick(flight)
+                                onDeleteClick(itinerary)
                             }
                             .align(Alignment.CenterStart),
                         horizontalArrangement = Arrangement.Center,
@@ -131,7 +130,7 @@ fun FlightRow(
                         top = MaterialTheme.spacing.extraSmall,
                         end = MaterialTheme.spacing.medium
                     ),
-                    text = "${flight.sliceData!!.slice.departure.airport.city} -> ${flight.sliceData.slice.arrival.airport.city}",
+                    text = "${itinerary.sliceData!!.slice.departure.airport.city} -> ${itinerary.sliceData.slice.arrival.airport.city}",
                     color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
@@ -160,7 +159,7 @@ fun FlightRow(
                                         start = 6.dp,
                                         end = 6.dp
                                     ),
-                                    text = "${convertTimeToHours(flight.sliceData.slice.info.duration)}h",
+                                    text = "${convertTimeToHours(itinerary.sliceData.slice.info.duration)}h",
                                     color = MaterialTheme.colors.primaryVariant,
                                     fontWeight = FontWeight.Bold,
                                     fontStyle = FontStyle.Italic,
@@ -171,8 +170,8 @@ fun FlightRow(
                             }
 
                             if (checkIfArrivesNextDay(
-                                    flight.sliceData.slice.departure.datetime.date,
-                                    flight.sliceData.slice.arrival.datetime.date
+                                    itinerary.sliceData.slice.departure.datetime.date,
+                                    itinerary.sliceData.slice.arrival.datetime.date
                                 )
                             ) {
                                 Surface(
@@ -213,7 +212,7 @@ fun FlightRow(
                                     start = 6.dp,
                                     end = 6.dp
                                 ),
-                                text = flight.sliceData.slice.departure.datetime.time24h,
+                                text = itinerary.sliceData.slice.departure.datetime.time24h,
                                 color = MaterialTheme.colors.onBackground,
                                 fontWeight = FontWeight.Bold,
                                 fontStyle = FontStyle.Italic,
@@ -241,7 +240,7 @@ fun FlightRow(
                                             fontStyle = FontStyle.Italic
                                         )
                                     ) {
-                                        append("$${flight.priceDetails!!.totalPerTicket.toInt()}")
+                                        append("$${itinerary.priceDetails!!.totalPerTicket.toInt()}")
                                     }
 
                                 },
@@ -254,7 +253,7 @@ fun FlightRow(
                             )
                         }
 
-                        if (flight.sliceData.slice.info.connectionCount != 0) {
+                        if (itinerary.sliceData.slice.info.connectionCount != 0) {
                             Surface(
                                 modifier = Modifier.padding(start = 2.dp, top = 4.dp),
                                 shape = RoundedCornerShape(16.dp),
@@ -267,7 +266,7 @@ fun FlightRow(
                                         start = 6.dp,
                                         end = 6.dp
                                     ),
-                                    text = "${flight.sliceData.slice.info.connectionCount} stop(s)",
+                                    text = "${itinerary.sliceData.slice.info.connectionCount} stop(s)",
                                     color = AppColors.mBlue,
                                     fontWeight = FontWeight.ExtraBold,
                                     fontStyle = FontStyle.Italic,
@@ -300,7 +299,7 @@ fun FlightRow(
                                         start = 6.dp,
                                         end = 6.dp
                                     ),
-                                    text = flight.sliceData.slice.airline.name,
+                                    text = itinerary.sliceData.slice.airline.name,
                                     maxLines = 1,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colors.onBackground,

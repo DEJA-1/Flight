@@ -11,7 +11,7 @@ interface FlightApi {
     suspend fun getLocations(
         @Query("rapidapi-key") apiKey: String = BuildConfig.API_KEY,
         @Query("name") name : String,
-    ) : LocationResponse
+    ) : List<LocationResponse>
 
     @GET(value = "v2/flight/departures")
     suspend fun getFlights(

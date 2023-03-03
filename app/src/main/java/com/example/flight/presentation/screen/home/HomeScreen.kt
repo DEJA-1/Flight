@@ -1,6 +1,7 @@
 package com.example.flight.presentation.screen.home
 
 import android.graphics.drawable.Icon
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -11,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,6 +32,7 @@ import com.example.flight.ui.theme.spacing
 import com.example.flight.util.convertTimeToHours
 import com.example.flight.util.filterFlights
 import com.example.flight.util.sortFlights
+import com.example.flight.util.updateIsDialogOpen
 
 @Composable
 fun HomeScreen(
@@ -40,15 +43,16 @@ fun HomeScreen(
 ) {
 
     val filterParametersState by viewModel.filterParametersState.collectAsState()
+    val flightSearchParametersState by viewModel.flightSearchParametersState.collectAsState()
 
     // -------------- OLD
-    val flights = viewModel.flightData.value.result?.itineraryData?.toModel()?.itineraries
-    val criteria = viewModel.selectedSort.value
+    val itineraries = viewModel.flightData.value.result?.itineraryData?.toModel()?.itineraries
+    val sortCriteria = viewModel.selectedSort.value
     val flightParams = viewModel.filterParams.value
-    val filteredFlights = filterFlights(flightParams, flights)
+    val filteredItineraries = filterFlights(flightParams, itineraries)
 
-    val sortedAndFilteredFlights = remember(criteria, filteredFlights) {
-        sortFlights(criteria, filteredFlights)
+    val sortedAndFilteredFlights = remember(sortCriteria, filteredItineraries) {
+        sortFlights(sortCriteria, filteredItineraries)
     }
 
     Box(
@@ -56,32 +60,74 @@ fun HomeScreen(
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
     ) {
+
+        if (viewModel.error.value != "") {
+            Toast.makeText(LocalContext.current, viewModel.error.value, Toast.LENGTH_SHORT).show()
+            viewModel.resetErrorMessageValue()
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
         ) {
             TopSection(
                 filterParametersState = filterParametersState,
+                flightSearchParametersState = flightSearchParametersState,
                 itineraryCount = viewModel.flightData.value.result?.itineraryCount ?: 0,
                 buttonNames = viewModel.buttonNames,
+                buttonNamesFilters = viewModel.buttonNamesFilters,
+                locationCode = viewModel.location.value.cityCode ?: "WAW",
                 selectedButtonIndex = viewModel.selectedButtonIndex.value,
                 selectedButtonName = viewModel.selectedButtonName.value,
                 isThemeSwitchChecked = themeViewModel.isDarkTheme,
-                onDisableNextDayArrivalsClicked = { isDisabled -> viewModel.updateFilterDisableNextDayArrivals(isDisabled) },
-                onDurationButtonClicked = { buttonName -> viewModel.updateFilterMaxDuration(buttonName) },
+                selectedSort = viewModel.selectedSort.value,
+                updateSelectedSort = { sortName -> viewModel.updateSelectedSort(sortName) },
+                getLocation = { cityName -> viewModel.getLocation(cityName) },
+                updateFlightSearchDepartureTime = { date ->
+                    viewModel.updateFlightSearchDepartureTime(
+                        date = date
+                    )
+                },
+                updateFlightSearchCityDeparture = {
+                    viewModel.updateFlightSearchCityDeparture(
+                        city = viewModel.location.value.cityCode ?: "WAR"
+                    )
+                },
+                updateFlightSearchCityArrival = {
+                    viewModel.updateFlightSearchCityArrival(
+                        city = viewModel.location.value.cityCode ?: "PAR"
+                    )
+                },
+                updateFlightSearchPassengersCount = { passengerCount ->
+                    viewModel.updateFlightSearchPassengersCount(
+                        passengers = passengerCount
+                    )
+                },
+                onDisableNextDayArrivalsClicked = { isDisabled ->
+                    viewModel.updateFilterDisableNextDayArrivals(
+                        isDisabled
+                    )
+                },
+                onDurationButtonClicked = { buttonName ->
+                    viewModel.updateFilterMaxDuration(
+                        buttonName
+                    )
+                },
                 onThemeSwitchClicked = { themeViewModel.switchTheme() },
-                onSliderValueChange = { valueFromSlider -> viewModel.updateFilterMaxPrice(valueFromSlider) },
+                onSliderValueChange = { valueFromSlider ->
+                    viewModel.updateFilterMaxPrice(
+                        valueFromSlider
+                    )
+                },
                 onParamsUpperClicked = { buttonIndex, buttonName ->
                     viewModel.updateSelectedButtonIndex(buttonIndex)
-                    viewModel.updateIsDialogOpen()
                     viewModel.updateSelectedButtonName(buttonName)
                 },
                 onParamsBottomClicked = { buttonName ->
                     if (buttonName != "SAVE") {
-                        viewModel.updateIsDialogOpen()
                         viewModel.updateSelectedButtonName(buttonName)
                     } else {
-                        commonViewModel.updateCurrentFlightParams(viewModel.flightSearch.value)
+                        commonViewModel.updateCurrentFlightParams(flightSearchParametersState)
                         viewModel.getFlights()
                     }
                 }
@@ -94,7 +140,7 @@ fun HomeScreen(
                         CircularProgressIndicator()
                     }
                 }
-                else -> {
+                false -> {
                     if (sortedAndFilteredFlights.isNullOrEmpty())
                         Box(
                             modifier = Modifier.fillMaxSize(),

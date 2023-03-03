@@ -30,7 +30,7 @@ import com.example.flight.ui.theme.spacing
 @Composable
 fun DialogSort(
     openDialog: MutableState<Boolean>,
-    selectedSort: MutableState<String>,
+    selectedSort: String,
     onDoneQuitClick: () -> Unit,
     onSortClick: (String) -> Unit
 ) {
@@ -49,7 +49,7 @@ fun DialogSort(
 
 @Composable
 fun CustomDialogUiSort(
-    selectedSort: MutableState<String>,
+    selectedSort: String,
     onDoneQuitClick: () -> Unit,
     onSortClick: (String) -> Unit
 ) {
@@ -62,7 +62,7 @@ fun CustomDialogUiSort(
 
 @Composable
 fun SortDialogUi(
-    selectedSort: MutableState<String>,
+    selectedSort: String,
     onSortClick: (String) -> Unit,
     onDoneQuitClick: () -> Unit
 ) {
@@ -111,7 +111,7 @@ fun SortDialogUi(
 @Composable
 fun MySortRow(
     item: String,
-    selectedSort: MutableState<String>,
+    selectedSort: String,
     onSortClick: () -> Unit
 ) {
     Surface(
@@ -125,7 +125,7 @@ fun MySortRow(
         shape = RoundedCornerShape(18.dp),
         color = MaterialTheme.colors.surface,
         border = BorderStroke(
-            width = 2.dp, color = if (selectedSort.value == item)
+            width = 2.dp, color = if (selectedSort == item)
                 MaterialTheme.colors.primary
             else
                 MaterialTheme.colors.secondary
