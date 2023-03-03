@@ -15,13 +15,16 @@
 ![image](https://user-images.githubusercontent.com/83213476/220459360-dfbd2c0b-8bdc-48b4-84f3-cc0e77c1d579.png) ![image](https://user-images.githubusercontent.com/83213476/220456748-85ac4c8f-0b86-4a1f-b8bc-dd5d7800b5c4.png)
 
   - Check detailed description of the route
-  (In Progress)
+  
+  ![image](https://user-images.githubusercontent.com/83213476/222720806-04dfbf94-de46-4fef-b1fb-a24a248bcfc0.png)
   
   - Check detailed information about connections/stops during the itinerary
-  (In Progress)
+  
+  ![image](https://user-images.githubusercontent.com/83213476/222721005-7ba5415b-acaa-4019-9419-3f2f5c55706f.png)
   
   - Save your flights
-  (In Progress)
+  
+  ![ezgif com-video-to-gif](https://user-images.githubusercontent.com/83213476/222721599-b14c5507-6c97-458a-b98b-d3f9abcd0aab.gif)
   
   - Browse your saved flights
   (In Progress)
@@ -32,3 +35,4 @@
   - HILT
   - MVVM
   - ROOM
+  - COROUTINES/FLOW (in progress)
