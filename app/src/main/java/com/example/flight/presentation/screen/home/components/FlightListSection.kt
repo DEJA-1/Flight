@@ -28,9 +28,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.flight.common.AppColors
 import com.example.flight.domain.model.flight.ItineraryModel
-import com.example.flight.domain.model.location.Location
 import com.example.flight.ui.theme.spacing
-import com.example.flight.util.arrivalCityString
 import com.example.flight.util.checkIfArrivesNextDay
 import com.example.flight.util.convertTimeToHours
 import com.example.flight.util.departureCityString

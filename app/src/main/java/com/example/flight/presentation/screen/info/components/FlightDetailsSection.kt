@@ -18,12 +18,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.flight.domain.model.FlightSearchParametersState
 import com.example.flight.domain.model.flight.ItineraryModel
 import com.example.flight.presentation.screen.common_components.MyDivider
-import com.example.flight.presentation.viewModel.CommonViewModel
 import com.example.flight.ui.theme.spacing
-import com.example.flight.util.arrivalCityString
 import com.example.flight.util.departureCityString
 
 @Composable

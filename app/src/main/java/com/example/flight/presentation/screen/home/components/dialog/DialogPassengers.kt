@@ -1,6 +1,5 @@
 package com.example.flight.presentation.screen.home.components.dialog
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -24,10 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.flight.R
 import com.example.flight.presentation.screen.common_components.DoneButton
-import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.ui.theme.spacing
 
 @Composable

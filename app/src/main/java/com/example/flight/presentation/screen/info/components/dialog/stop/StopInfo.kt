@@ -21,8 +21,6 @@ import androidx.compose.ui.window.Dialog
 import com.example.flight.domain.model.flight.FlightModel
 import com.example.flight.presentation.screen.common_components.DoneButton
 import com.example.flight.presentation.screen.common_components.MyDivider
-import com.example.flight.presentation.screen.home.components.dialog.SortDialogUi
-import com.example.flight.presentation.screen.info.components.FlightDrawing
 import com.example.flight.ui.theme.spacing
 import com.example.flight.util.departureCityString
 
@@ -106,8 +104,6 @@ fun FlightInfoRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.4f)
-//            .width(400.dp)
-//            .height(80.dp)
                     .background(MaterialTheme.colors.surface)
                     .padding(
                         start = MaterialTheme.spacing.small,

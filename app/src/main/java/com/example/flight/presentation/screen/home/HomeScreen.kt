@@ -27,7 +27,6 @@ import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
 import com.example.flight.util.filterFlights
 import com.example.flight.util.sortFlights
-import com.example.flight.util.updateIsDialogOpen
 
 @Composable
 fun HomeScreen(
@@ -41,8 +40,9 @@ fun HomeScreen(
     val flightSearchParametersState by viewModel.flightSearchParametersState.collectAsState()
     val flightsFromApiResponse by viewModel.flightsFromApiResponse.collectAsState()
 
-    val itineraries = flightsFromApiResponse.result?.itineraryData?.toModel()?.itineraries
+    val buttonUiState by viewModel.buttonUiState.collectAsState()
 
+    val itineraries = flightsFromApiResponse.result?.itineraryData?.toModel()?.itineraries
     val sortCriteria = viewModel.selectedSort.value
     val filteredItineraries = filterFlights(filterParametersState, itineraries)
 
@@ -68,10 +68,7 @@ fun HomeScreen(
             TopSection(
                 filterParametersState = filterParametersState,
                 itineraryCount = flightsFromApiResponse.result?.itineraryCount ?: 0,
-                buttonNames = viewModel.buttonNames,
-                buttonNamesFilters = viewModel.buttonNamesFilters,
-                selectedButtonIndex = viewModel.selectedButtonIndex.value,
-                selectedButtonName = viewModel.selectedButtonName.value,
+                buttonUiState = buttonUiState,
                 isThemeSwitchChecked = themeViewModel.isDarkTheme,
                 selectedSort = viewModel.selectedSort.value,
                 updateSelectedSort = { sortName -> viewModel.updateSelectedSort(sortName) },
@@ -113,15 +110,15 @@ fun HomeScreen(
                     )
                 },
                 onParamsUpperClicked = { buttonIndex, buttonName ->
-                    viewModel.updateSelectedButtonIndex(buttonIndex)
-                    viewModel.updateSelectedButtonName(buttonName)
+                    viewModel.updateButtonUiStateSelectedButtonIndex(buttonIndex)
+                    viewModel.updateButtonUiStateSelectedButtonName(buttonName)
                 },
                 onParamsBottomClicked = { buttonName ->
                     if (buttonName != "SAVE") {
-                        viewModel.updateSelectedButtonName(buttonName)
+                        viewModel.updateButtonUiStateSelectedButtonName(buttonName)
                     } else {
                         commonViewModel.updateCurrentFlightParams(flightSearchParametersState)
-                        viewModel.getFlights()
+                        viewModel.getFlights(flightSearchParametersState)
                     }
                 }
             )

@@ -18,12 +18,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.flight.domain.model.FilterParametersState
 import com.example.flight.presentation.screen.common_components.DoneButton
 import com.example.flight.presentation.screen.common_components.CustomSwitch
 import com.example.flight.presentation.screen.home.components.ParamsSection
-import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.ui.theme.spacing
 
 @Composable

@@ -16,12 +16,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.flight.domain.model.FilterParametersState
-import com.example.flight.domain.model.FlightSearchParametersState
 import com.example.flight.presentation.screen.common_components.Header
-import com.example.flight.presentation.viewModel.CommonViewModel
 import com.example.flight.presentation.screen.home.components.dialog.*
-import com.example.flight.presentation.viewModel.HomeViewModel
-import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
 import com.example.flight.util.updateIsDialogOpen
 
@@ -29,10 +25,7 @@ import com.example.flight.util.updateIsDialogOpen
 fun TopSection(
     filterParametersState: FilterParametersState,
     isThemeSwitchChecked: MutableState<Boolean>,
-    buttonNames: List<String>,
-    buttonNamesFilters: List<String>,
-    selectedButtonIndex: Int,
-    selectedButtonName: String,
+    buttonUiState: ButtonUiState,
     itineraryCount: Int,
     selectedSort: String,
     updateSelectedSort: (String) -> Unit,
@@ -80,8 +73,8 @@ fun TopSection(
 
             ParamsSection(
                 isFilter = false,
-                buttonNames = buttonNames,
-                selectedButtonIndex = selectedButtonIndex
+                buttonNames = buttonUiState.buttonNames,
+                selectedButtonIndex = buttonUiState.selectedButtonIndex
             ) { buttonIndex, buttonName ->
                 onParamsUpperClicked(buttonIndex, buttonName)
                 updateIsDialogOpen(isDialogOpen)
@@ -94,9 +87,9 @@ fun TopSection(
 
                 TopSectionBottom(
                     itineraryCount = itineraryCount,
-                    buttonNames = buttonNamesFilters,
+                    buttonNames = buttonUiState.buttonNamesFilters,
                     isDialogOpen = isDialogOpen,
-                    selectedButtonIndex = selectedButtonIndex,
+                    selectedButtonIndex = buttonUiState.selectedButtonIndex,
                     onParamsBottomClicked = { buttonName -> onParamsBottomClicked(buttonName) }
                 )
 
@@ -105,7 +98,7 @@ fun TopSection(
 
 
         if (isDialogOpen.value) {
-            when (selectedButtonName) {
+            when (buttonUiState.selectedButtonName) {
                 "Departure" -> {
                     DialogCity(
                         openDialog = isDialogOpen,

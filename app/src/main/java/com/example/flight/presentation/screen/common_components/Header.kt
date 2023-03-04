@@ -14,8 +14,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
 
 @Composable
