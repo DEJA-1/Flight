@@ -10,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,7 +34,7 @@ fun SavedScreen(
     viewModel: SavedViewModel
 ) {
 
-    val flights = viewModel.itinerariesFromDb.collectAsState().value
+    val itinerariesFromDatabase by viewModel.itinerariesFromDb.collectAsState()
     val context = LocalContext.current
 
     Box(
@@ -48,7 +49,9 @@ fun SavedScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Header()
+            Header(
+                isSwitchThemeButtonVisible = false,
+            )
 
             MyDivider()
 
@@ -61,7 +64,7 @@ fun SavedScreen(
                 textAlign = TextAlign.Center
             )
 
-            when (flights.isEmpty()) {
+            when (itinerariesFromDatabase.isEmpty()) {
                 true -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -77,7 +80,7 @@ fun SavedScreen(
                 }
                 else -> {
                     FlightListSection(
-                        flightList = flights,
+                        itineraries = itinerariesFromDatabase,
                         isSaved = true,
                         onDeleteClick = { itinerary ->
                             viewModel.deleteItineraryFromDb(itinerary)

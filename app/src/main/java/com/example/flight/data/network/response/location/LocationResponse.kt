@@ -1,6 +1,8 @@
-package com.example.flight.domain.model
+package com.example.flight.data.network.response.location
 
-data class Location(
+import com.example.flight.domain.model.location.Location
+
+data class LocationResponse(
     val airportCode: Any? = null,
     val cityCode: String? = null,
     val cityID: String? = null,
@@ -24,5 +26,16 @@ data class Location(
     val stateCode: String? = null,
     val timeZoneID: Int? = null,
     val timeZoneName: String? = null,
-    val type: String? = null
+    val type: String? = null,
 )
+
+fun LocationResponse.toLocation(): Location {
+    return Location(
+        airportCode = airportCode,
+        cityCode = cityCode,
+        cityID = cityID,
+        cityName = cityName,
+        country = country,
+        countryCode = countryCode
+    )
+}

@@ -1,20 +1,14 @@
 package com.example.flight.presentation.screen.info.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -24,18 +18,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.example.flight.common.AppColors
 import com.example.flight.domain.model.flight.ItineraryModel
 import com.example.flight.presentation.screen.common_components.MyDivider
-import com.example.flight.presentation.viewModel.CommonViewModel
 import com.example.flight.ui.theme.spacing
+import com.example.flight.util.departureCityString
 
 @Composable
 fun FlightDetailsSection(
-    flight: ItineraryModel,
-    commonViewModel: CommonViewModel,
+    itinerary: ItineraryModel,
+    passengersCount: Int,
     onSaveClicked: () -> Unit
 ) {
 
@@ -67,7 +58,7 @@ fun FlightDetailsSection(
                 ) {
 
                     Text(
-                        text = flight.sliceData!!.slice.departure.airport.name,
+                        text = departureCityString(itinerary.sliceData!!.slice.departure.airport),
                         color = MaterialTheme.colors.onBackground,
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic,
@@ -80,7 +71,7 @@ fun FlightDetailsSection(
                     MyDivider()
 
                     Text(
-                        text = flight.sliceData.slice.departure.datetime.dateDisplay.substringBeforeLast(
+                        text = itinerary.sliceData.slice.departure.datetime.dateDisplay.substringBeforeLast(
                             ","
                         ),
                         color = MaterialTheme.colors.onBackground,
@@ -101,7 +92,7 @@ fun FlightDetailsSection(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = flight.sliceData!!.slice.arrival.airport.name,
+                        text = departureCityString(itinerary.sliceData!!.slice.arrival.airport),
                         color = MaterialTheme.colors.onBackground,
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic,
@@ -114,7 +105,7 @@ fun FlightDetailsSection(
                     MyDivider()
 
                     Text(
-                        text = flight.sliceData.slice.arrival.datetime.dateDisplay.substringBeforeLast(
+                        text = itinerary.sliceData!!.slice.arrival.datetime.dateDisplay.substringBeforeLast(
                             ","
                         ),
                         color = MaterialTheme.colors.onBackground,
@@ -132,7 +123,7 @@ fun FlightDetailsSection(
 
 
             Text(
-                text = flight.sliceData!!.slice.airline.name,
+                text = itinerary.sliceData!!.slice.airline.name,
                 color = MaterialTheme.colors.onBackground,
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Italic,
@@ -147,7 +138,7 @@ fun FlightDetailsSection(
             MyDivider()
 
             Text(
-                text = "${commonViewModel.currentFlightParams.value.passengers} passenger(s)",
+                text = "$passengersCount passenger(s)",
                 color = MaterialTheme.colors.onBackground,
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Italic,
@@ -178,7 +169,7 @@ fun FlightDetailsSection(
                             fontSize = 14.sp
                         )
                     ) {
-                        append("$${flight.priceDetails?.totalPerTicket}")
+                        append("$${itinerary.priceDetails?.totalPerTicket}")
                     }
                 }
             )
@@ -217,7 +208,7 @@ fun FlightDetailsSection(
                                 fontSize = 32.sp
                             )
                         ) {
-                            append("$${flight.priceDetails?.total}")
+                            append("$${itinerary.priceDetails?.total}")
                         }
                     }
                 )

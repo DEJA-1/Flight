@@ -1,6 +1,5 @@
 package com.example.flight.presentation.screen.home.components.dialog
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -24,22 +23,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.flight.R
 import com.example.flight.presentation.screen.common_components.DoneButton
-import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.ui.theme.spacing
 
 @Composable
 fun DialogPassengers(
     openDialog: MutableState<Boolean>,
-    onDoneQuitClick: () -> Unit
+    onPassengerButtonClicked: (Int) -> Unit,
+    onDoneQuitClick: () -> Unit,
 ) {
 
     if (openDialog.value) {
         Dialog(onDismissRequest = { openDialog.value = false }) {
             CustomDialogUiPassengers(
-                onDoneQuitClick
+                onDoneQuitClick = onDoneQuitClick,
+                onPassengerButtonClicked = onPassengerButtonClicked
             )
         }
     }
@@ -47,15 +46,19 @@ fun DialogPassengers(
 
 @Composable
 fun CustomDialogUiPassengers(
-    onDoneQuitClick: () -> Unit
+    onDoneQuitClick: () -> Unit,
+    onPassengerButtonClicked: (Int) -> Unit,
 ) {
-    PassengersDialogUi(onDoneQuitClick)
+    PassengersDialogUi(
+        onDoneQuitClick,
+        onPassengerButtonClicked = onPassengerButtonClicked
+    )
 }
 
 @Composable
 fun PassengersDialogUi(
     onDoneQuitClick: () -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
+    onPassengerButtonClicked: (Int) -> Unit,
 ) {
     val passengers = remember {
         mutableStateOf(1)
@@ -94,7 +97,8 @@ fun PassengersDialogUi(
                     icon = painterResource(id = R.drawable.add)
                 ) {
                     passengers.value++
-                    viewModel.updatePassengers(passengers = passengers.value)
+//                    viewModel.updatePassengers(passengers = passengers.value)
+                    onPassengerButtonClicked(passengers.value)
                 }
 
                 PassengerButton(
@@ -102,12 +106,13 @@ fun PassengersDialogUi(
                 ) {
                     if (passengers.value > 0)
                         passengers.value--
-                    viewModel.updatePassengers(passengers = passengers.value)
+//                    viewModel.updatePassengers(passengers = passengers.value)
+                    onPassengerButtonClicked(passengers.value)
                 }
             }
-            
+
         }
-        
+
         DoneButton(isDoneEnabled = isDoneEnabled) {
             onDoneQuitClick()
         }
@@ -117,7 +122,7 @@ fun PassengersDialogUi(
 @Composable
 fun PassengerButton(
     icon: Painter,
-    onPassengerButtonClicked: () -> Unit
+    onPassengerButtonClicked: () -> Unit,
 ) {
     Card(
         shape = CircleShape,

@@ -3,8 +3,6 @@ package com.example.flight.domain.model.flight
 import androidx.room.*
 import com.example.flight.common.type_converters.PriceDetailsModelConverter
 import com.example.flight.common.type_converters.SliceDataModelConverter
-import com.example.flight.data.network.response.flight.PriceDetails
-import com.example.flight.data.network.response.flight.SliceData
 
 @kotlinx.serialization.Serializable
 @Entity(tableName = "itinerary_table")
@@ -18,5 +16,5 @@ data class ItineraryModel(
 
     @ColumnInfo(name = "slice_data")
     @TypeConverters(SliceDataModelConverter::class)
-    val sliceData: SliceDataModel? = null
+    val sliceData: SlicesModel? = null
 )

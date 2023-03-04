@@ -5,9 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -28,7 +26,9 @@ fun InfoScreen(
     commonViewModel: CommonViewModel
 ) {
 
-    val flight = commonViewModel.currentItinerary.value
+    val itinerary = commonViewModel.currentItinerary.value
+    val currentFlightSearchParameters by commonViewModel.currentFlightParams.collectAsState()
+
     val isDialogOpen = remember {
         mutableStateOf(false)
     }
@@ -74,14 +74,14 @@ fun InfoScreen(
                 )
 
                 FlightInfoSection(
-                    flight = flight
+                    flight = itinerary
                 ) {
                     isDialogOpen.value = !isDialogOpen.value
                 }
 
                 FlightDetailsSection(
-                    flight = flight,
-                    commonViewModel = commonViewModel
+                    itinerary = itinerary,
+                    passengersCount = currentFlightSearchParameters.passengers,
                 ) {
                     Toast.makeText(context, "Itinerary saved successfully", Toast.LENGTH_SHORT).show()
                     viewModel.addItineraryToDb(commonViewModel.currentItinerary.value)
@@ -93,7 +93,7 @@ fun InfoScreen(
         }
 
         if (isDialogOpen.value){
-            DialogStop(openDialog = isDialogOpen, flights = flight.sliceData!!.slice.flightData.flights) {
+            DialogStop(openDialog = isDialogOpen, itineraries = itinerary.sliceData!!.slice.flightData.flights) {
                 isDialogOpen.value = false
             }
         }

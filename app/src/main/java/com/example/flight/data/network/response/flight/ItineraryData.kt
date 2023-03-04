@@ -1,6 +1,6 @@
 package com.example.flight.data.network.response.flight
 
-import com.example.flight.domain.model.flight.ItineraryDataModel
+import com.example.flight.domain.model.flight.ItinerariesModel
 
 data class ItineraryData(
     val itinerary_0: Itinerary,
@@ -65,7 +65,7 @@ data class ItineraryData(
     val itinerary_59: Itinerary,
 ) {
     fun toModel() =
-        ItineraryDataModel(
+        ItinerariesModel(
             listOfNotNull(
                 itinerary_0,
                 itinerary_1,

@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,14 +14,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
 
 @Composable
 fun Header(
-    themeViewModel: ThemeViewModel = viewModel(),
-    isSwitch: Boolean = false
+    isSwitchThemeButtonVisible: Boolean,
+    isChecked: MutableState<Boolean> = mutableStateOf(false),
+    onThemeSwitchClicked: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -36,9 +36,9 @@ fun Header(
             color = MaterialTheme.colors.onBackground
         )
 
-        if (isSwitch)
-            CustomSwitch(isChecked = themeViewModel.isDarkTheme) {
-                themeViewModel.switchTheme()
+        if (isSwitchThemeButtonVisible)
+            CustomSwitch(isChecked = isChecked) {
+                onThemeSwitchClicked()
             }
     }
 

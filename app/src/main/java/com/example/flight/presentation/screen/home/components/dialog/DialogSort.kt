@@ -1,7 +1,6 @@
 package com.example.flight.presentation.screen.home.components.dialog
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,7 +28,7 @@ import com.example.flight.ui.theme.spacing
 @Composable
 fun DialogSort(
     openDialog: MutableState<Boolean>,
-    selectedSort: MutableState<String>,
+    selectedSort: String,
     onDoneQuitClick: () -> Unit,
     onSortClick: (String) -> Unit
 ) {
@@ -49,7 +47,7 @@ fun DialogSort(
 
 @Composable
 fun CustomDialogUiSort(
-    selectedSort: MutableState<String>,
+    selectedSort: String,
     onDoneQuitClick: () -> Unit,
     onSortClick: (String) -> Unit
 ) {
@@ -62,7 +60,7 @@ fun CustomDialogUiSort(
 
 @Composable
 fun SortDialogUi(
-    selectedSort: MutableState<String>,
+    selectedSort: String,
     onSortClick: (String) -> Unit,
     onDoneQuitClick: () -> Unit
 ) {
@@ -111,7 +109,7 @@ fun SortDialogUi(
 @Composable
 fun MySortRow(
     item: String,
-    selectedSort: MutableState<String>,
+    selectedSort: String,
     onSortClick: () -> Unit
 ) {
     Surface(
@@ -125,7 +123,7 @@ fun MySortRow(
         shape = RoundedCornerShape(18.dp),
         color = MaterialTheme.colors.surface,
         border = BorderStroke(
-            width = 2.dp, color = if (selectedSort.value == item)
+            width = 2.dp, color = if (selectedSort == item)
                 MaterialTheme.colors.primary
             else
                 MaterialTheme.colors.secondary

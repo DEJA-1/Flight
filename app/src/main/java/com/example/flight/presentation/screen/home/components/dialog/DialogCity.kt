@@ -2,7 +2,6 @@
 
 package com.example.flight.presentation.screen.home.components.dialog
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -35,10 +34,13 @@ import java.util.*
 @Composable
 fun DialogCity(
     openDialog: MutableState<Boolean>,
-    text: MutableState<String> = mutableStateOf(""),
     onDoneQuitClick: () -> Unit,
     onDoneClick: (String) -> Unit
 ) {
+
+    val text = remember {
+        mutableStateOf("")
+    }
 
     if (openDialog.value) {
         Dialog(onDismissRequest = { openDialog.value = false }) {
