@@ -3,6 +3,7 @@ package com.example.flight.presentation.viewModel
 import android.text.TextUtils.replace
 import android.util.Log
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -89,8 +90,11 @@ class HomeViewModel @Inject constructor(
     private val _location = mutableStateOf(LocationResponse())
     val location: State<LocationResponse> = _location
 
-    private val _flightData = mutableStateOf(ResultsModel())
-    val flightData = _flightData
+//    private val _flightData = mutableStateOf(ResultsModel())
+//    val flightData = _flightData
+
+    private val _flightsFromApiResponse = MutableStateFlow(ResultsModel())
+    val flightsFromApiResponse: StateFlow<ResultsModel> = _flightsFromApiResponse
 
     private val _passengers = mutableStateOf(1)
     val passengers = _passengers
@@ -112,8 +116,8 @@ class HomeViewModel @Inject constructor(
     val selectedSort = _selectedSort
 
 
-    private val _flightSearch = mutableStateOf(FlightSearchParametersState())
-    val flightSearch = _flightSearch
+//    private val _flightSearch = mutableStateOf(FlightSearchParametersState())
+//    val flightSearch = _flightSearch
 
     private val _filterParams = mutableStateOf(FilterParametersState())
     val filterParams = _filterParams
@@ -169,7 +173,7 @@ class HomeViewModel @Inject constructor(
 
         when (response) {
             is Resource.Success -> {
-                _flightData.value = response.data!!.getAirFlightDepartures.results.toResultsModel()
+                _flightsFromApiResponse.emit(response.data!!.getAirFlightDepartures.results.toResultsModel())
                 _loadingFlights.value = false
             }
             is Resource.Loading -> {
