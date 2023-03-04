@@ -35,7 +35,7 @@ import com.example.flight.util.convertTimeToHours
 @Composable
 fun FlightListSection(
     modifier: Modifier = Modifier,
-    flightList: List<ItineraryModel>,
+    itineraries: List<ItineraryModel>,
     isSaved: Boolean,
     onDeleteClick: (ItineraryModel) -> Unit = {},
     onFlightClick: (ItineraryModel) -> Unit
@@ -46,7 +46,7 @@ fun FlightListSection(
             .fillMaxSize()
             .padding(top = 4.dp)
     ) {
-        items(flightList) { flight ->
+        items(itineraries) { flight ->
             FlightRow(
                 itinerary = flight,
                 modifier = Modifier,

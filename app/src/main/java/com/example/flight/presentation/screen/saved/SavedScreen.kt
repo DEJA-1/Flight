@@ -79,7 +79,7 @@ fun SavedScreen(
                 }
                 else -> {
                     FlightListSection(
-                        flightList = flights,
+                        itineraries = flights,
                         isSaved = true,
                         onDeleteClick = { itinerary ->
                             viewModel.deleteItineraryFromDb(itinerary)

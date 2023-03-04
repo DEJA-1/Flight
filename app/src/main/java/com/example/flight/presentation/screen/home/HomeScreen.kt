@@ -1,6 +1,5 @@
 package com.example.flight.presentation.screen.home
 
-import android.graphics.drawable.Icon
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,8 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.flight.R
-import com.example.flight.common.AppColors
-import com.example.flight.domain.model.flight.ItineraryModel
 import com.example.flight.navigation.Screen
 import com.example.flight.presentation.screen.home.components.FlightListSection
 import com.example.flight.presentation.screen.home.components.TopSection
@@ -29,7 +25,6 @@ import com.example.flight.presentation.viewModel.CommonViewModel
 import com.example.flight.presentation.viewModel.HomeViewModel
 import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.spacing
-import com.example.flight.util.convertTimeToHours
 import com.example.flight.util.filterFlights
 import com.example.flight.util.sortFlights
 import com.example.flight.util.updateIsDialogOpen
@@ -155,7 +150,7 @@ fun HomeScreen(
                         }
                     else {
                         FlightListSection(
-                            flightList = sortedAndFilteredFlights,
+                            itineraries = sortedAndFilteredFlights,
                             isSaved = false
                         ) { itinerary ->
                             commonViewModel.updateCurrentItinerary(itinerary)
