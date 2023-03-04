@@ -27,7 +27,8 @@
   ![ezgif com-video-to-gif](https://user-images.githubusercontent.com/83213476/222721599-b14c5507-6c97-458a-b98b-d3f9abcd0aab.gif)
   
   - Browse your saved flights
-  (In Progress)
+  
+  ![image](https://user-images.githubusercontent.com/83213476/222913561-05862940-d7fc-4790-a2e1-9500c1c17bd5.png)
 
 # PROJECT BUILT WITH:
   - JETPACK COMPOSE
@@ -35,4 +36,4 @@
   - HILT
   - MVVM
   - ROOM
-  - COROUTINES/FLOW (in progress)
+  - COROUTINES/FLOW
