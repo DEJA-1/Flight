@@ -28,9 +28,12 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.flight.common.AppColors
 import com.example.flight.domain.model.flight.ItineraryModel
+import com.example.flight.domain.model.location.Location
 import com.example.flight.ui.theme.spacing
+import com.example.flight.util.arrivalCityString
 import com.example.flight.util.checkIfArrivesNextDay
 import com.example.flight.util.convertTimeToHours
+import com.example.flight.util.departureCityString
 
 @Composable
 fun FlightListSection(
@@ -48,8 +51,8 @@ fun FlightListSection(
     ) {
         items(itineraries) { flight ->
             FlightRow(
-                itinerary = flight,
                 modifier = Modifier,
+                itinerary = flight,
                 isSaved = isSaved,
                 onDeleteClick = onDeleteClick,
                 onFlightClick = onFlightClick
@@ -104,19 +107,18 @@ fun FlightRow(
                 )
 
                 if (isSaved) {
-                    Row(
+                    Surface(
+                        shape = RoundedCornerShape(6.dp),
+                        color = AppColors.mRed,
                         modifier = Modifier
-                            .fillMaxHeight()
-                            .background(AppColors.mRed)
+                            .padding(MaterialTheme.spacing.extraSmall)
                             .clickable {
                                 onDeleteClick(itinerary)
                             }
-                            .align(Alignment.CenterStart),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                            .align(Alignment.BottomStart),
                     ) {
                         Icon(
-                            modifier = Modifier.padding(MaterialTheme.spacing.small),
+                            modifier = Modifier.padding(MaterialTheme.spacing.extraSmall),
                             imageVector = Icons.Filled.Delete, contentDescription = "Delete icon",
                             tint = MaterialTheme.colors.onBackground
                         )
@@ -130,7 +132,7 @@ fun FlightRow(
                         top = MaterialTheme.spacing.extraSmall,
                         end = MaterialTheme.spacing.medium
                     ),
-                    text = "${itinerary.sliceData!!.slice.departure.airport.city} -> ${itinerary.sliceData.slice.arrival.airport.city}",
+                    text = "${departureCityString(itinerary.sliceData!!.slice.departure.airport)} -> ${departureCityString(itinerary.sliceData.slice.arrival.airport)}",
                     color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
@@ -159,7 +161,7 @@ fun FlightRow(
                                         start = 6.dp,
                                         end = 6.dp
                                     ),
-                                    text = "${convertTimeToHours(itinerary.sliceData.slice.info.duration)}h",
+                                    text = "${convertTimeToHours(itinerary.sliceData!!.slice.info.duration)}h",
                                     color = MaterialTheme.colors.primaryVariant,
                                     fontWeight = FontWeight.Bold,
                                     fontStyle = FontStyle.Italic,
@@ -170,7 +172,7 @@ fun FlightRow(
                             }
 
                             if (checkIfArrivesNextDay(
-                                    itinerary.sliceData.slice.departure.datetime.date,
+                                    itinerary.sliceData!!.slice.departure.datetime.date,
                                     itinerary.sliceData.slice.arrival.datetime.date
                                 )
                             ) {
@@ -212,7 +214,7 @@ fun FlightRow(
                                     start = 6.dp,
                                     end = 6.dp
                                 ),
-                                text = itinerary.sliceData.slice.departure.datetime.time24h,
+                                text = itinerary.sliceData!!.slice.departure.datetime.time24h,
                                 color = MaterialTheme.colors.onBackground,
                                 fontWeight = FontWeight.Bold,
                                 fontStyle = FontStyle.Italic,
@@ -253,7 +255,7 @@ fun FlightRow(
                             )
                         }
 
-                        if (itinerary.sliceData.slice.info.connectionCount != 0) {
+                        if (itinerary.sliceData!!.slice.info.connectionCount != 0) {
                             Surface(
                                 modifier = Modifier.padding(start = 2.dp, top = 4.dp),
                                 shape = RoundedCornerShape(16.dp),

@@ -41,13 +41,10 @@ fun HomeScreen(
     val flightSearchParametersState by viewModel.flightSearchParametersState.collectAsState()
     val flightsFromApiResponse by viewModel.flightsFromApiResponse.collectAsState()
 
-    // -------------- OLD
-//    val itineraries = viewModel.flightData.value.result?.itineraryData?.toModel()?.itineraries
     val itineraries = flightsFromApiResponse.result?.itineraryData?.toModel()?.itineraries
 
     val sortCriteria = viewModel.selectedSort.value
-    val flightParams = viewModel.filterParams.value
-    val filteredItineraries = filterFlights(flightParams, itineraries)
+    val filteredItineraries = filterFlights(filterParametersState, itineraries)
 
     val sortedAndFilteredFlights = remember(sortCriteria, filteredItineraries) {
         sortFlights(sortCriteria, filteredItineraries)
@@ -70,25 +67,51 @@ fun HomeScreen(
         ) {
             TopSection(
                 filterParametersState = filterParametersState,
-                flightSearchParametersState = flightSearchParametersState,
                 itineraryCount = flightsFromApiResponse.result?.itineraryCount ?: 0,
                 buttonNames = viewModel.buttonNames,
                 buttonNamesFilters = viewModel.buttonNamesFilters,
-                locationCode = viewModel.location.value.cityCode ?: "WAW",
                 selectedButtonIndex = viewModel.selectedButtonIndex.value,
                 selectedButtonName = viewModel.selectedButtonName.value,
                 isThemeSwitchChecked = themeViewModel.isDarkTheme,
                 selectedSort = viewModel.selectedSort.value,
                 updateSelectedSort = { sortName -> viewModel.updateSelectedSort(sortName) },
                 getLocation = { cityName -> viewModel.getLocation(cityName) },
-                updateFlightSearchDepartureTime = { date -> viewModel.updateFlightSearchDepartureTime(date = date) },
-                updateFlightSearchCityDeparture = { viewModel.updateFlightSearchCityDeparture(city = viewModel.location.value.cityCode ?: "WAR") },
-                updateFlightSearchCityArrival = { viewModel.updateFlightSearchCityArrival(city = viewModel.location.value.cityCode ?: "PAR") },
-                updateFlightSearchPassengersCount = { passengerCount -> viewModel.updateFlightSearchPassengersCount(passengers = passengerCount) },
-                onDisableNextDayArrivalsClicked = { isDisabled -> viewModel.updateFilterDisableNextDayArrivals(isDisabled) },
-                onDurationButtonClicked = { buttonName -> viewModel.updateFilterMaxDuration(buttonName) },
+                updateFlightSearchDepartureTime = { date ->
+                    viewModel.updateFlightSearchDepartureTime(
+                        date = date
+                    )
+                },
+                updateFlightSearchCityDeparture = {
+                    viewModel.updateFlightSearchCityDeparture(
+                        city = viewModel.location.value.cityCode ?: "WAR"
+                    )
+                },
+                updateFlightSearchCityArrival = {
+                    viewModel.updateFlightSearchCityArrival(
+                        city = viewModel.location.value.cityCode ?: "PAR"
+                    )
+                },
+                updateFlightSearchPassengersCount = { passengerCount ->
+                    viewModel.updateFlightSearchPassengersCount(
+                        passengers = passengerCount
+                    )
+                },
+                onDisableNextDayArrivalsClicked = { isDisabled ->
+                    viewModel.updateFilterDisableNextDayArrivals(
+                        isDisabled
+                    )
+                },
+                onDurationButtonClicked = { buttonName ->
+                    viewModel.updateFilterMaxDuration(
+                        buttonName
+                    )
+                },
                 onThemeSwitchClicked = { themeViewModel.switchTheme() },
-                onSliderValueChange = { valueFromSlider -> viewModel.updateFilterMaxPrice(valueFromSlider) },
+                onSliderValueChange = { valueFromSlider ->
+                    viewModel.updateFilterMaxPrice(
+                        valueFromSlider
+                    )
+                },
                 onParamsUpperClicked = { buttonIndex, buttonName ->
                     viewModel.updateSelectedButtonIndex(buttonIndex)
                     viewModel.updateSelectedButtonName(buttonName)
@@ -126,11 +149,12 @@ fun HomeScreen(
                     else {
                         FlightListSection(
                             itineraries = sortedAndFilteredFlights,
-                            isSaved = false
-                        ) { itinerary ->
-                            commonViewModel.updateCurrentItinerary(itinerary)
-                            navController.navigate(Screen.Info.route)
-                        }
+                            isSaved = false,
+                            onFlightClick = { itinerary ->
+                                commonViewModel.updateCurrentItinerary(itinerary)
+                                navController.navigate(Screen.Info.route)
+                            }
+                        )
                     }
                 }
 

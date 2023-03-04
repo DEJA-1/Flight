@@ -28,7 +28,6 @@ import com.example.flight.util.updateIsDialogOpen
 @Composable
 fun TopSection(
     filterParametersState: FilterParametersState,
-    flightSearchParametersState: FlightSearchParametersState,
     isThemeSwitchChecked: MutableState<Boolean>,
     buttonNames: List<String>,
     buttonNamesFilters: List<String>,
@@ -38,7 +37,6 @@ fun TopSection(
     selectedSort: String,
     updateSelectedSort: (String) -> Unit,
     getLocation: (String) -> Unit,
-    locationCode: String,
     updateFlightSearchPassengersCount: (Int) -> Unit,
     updateFlightSearchDepartureTime: (String) -> Unit,
     updateFlightSearchCityDeparture: () -> Unit,

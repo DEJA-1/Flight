@@ -3,10 +3,8 @@ package com.example.flight.presentation.screen.info.components.dialog.stop
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,31 +14,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.flight.domain.model.flight.FlightModel
-import com.example.flight.domain.model.flight.InfoModel
 import com.example.flight.presentation.screen.common_components.DoneButton
 import com.example.flight.presentation.screen.common_components.MyDivider
 import com.example.flight.presentation.screen.home.components.dialog.SortDialogUi
 import com.example.flight.presentation.screen.info.components.FlightDrawing
 import com.example.flight.ui.theme.spacing
+import com.example.flight.util.departureCityString
 
 
 @Composable
 fun DialogStop(
     openDialog: MutableState<Boolean>,
-    flights: List<FlightModel>,
+    itineraries: List<FlightModel>,
     onDoneQuitClick: () -> Unit,
 ) {
 
     if (openDialog.value) {
         Dialog(onDismissRequest = { openDialog.value = false }) {
-            CustomDialogUiStop(flights = flights) {
+            CustomDialogUiStop(flights = itineraries) {
                 onDoneQuitClick()
             }
         }
@@ -143,7 +139,7 @@ fun FlightInfoRow(
 
                         ) {
                             FlightInfo(
-                                city = flights[index].departure.airport.city,
+                                city = departureCityString(flights[index].departure.airport),
                                 airport = flights[index].departure.airport.name.substringAfter("- "),
                                 date = flights[index].departure.datetime.dateDisplay.substringBeforeLast(
                                     ","
@@ -156,7 +152,7 @@ fun FlightInfoRow(
 
                         ) {
                             FlightInfo(
-                                city = flights[index].arrival.airport.city,
+                                city = departureCityString(flights[index].arrival.airport),
                                 airport = flights[index].arrival.airport.name.substringAfter("- "),
                                 date = flights[index].arrival.datetime.dateDisplay.substringBeforeLast(
                                     ","

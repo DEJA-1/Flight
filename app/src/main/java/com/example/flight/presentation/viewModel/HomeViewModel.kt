@@ -35,6 +35,9 @@ class HomeViewModel @Inject constructor(
     private val _flightSearchParametersState = MutableStateFlow(FlightSearchParametersState())
     val flightSearchParametersState: StateFlow<FlightSearchParametersState> = _flightSearchParametersState
 
+    private val _flightsFromApiResponse = MutableStateFlow(ResultsModel())
+    val flightsFromApiResponse: StateFlow<ResultsModel> = _flightsFromApiResponse
+
     fun updateFilterMaxPrice(priceValueFromSlider: Float) {
         _filterParametersState.update { filterParametersState ->
             filterParametersState.copy(maxPrice = priceValueFromSlider.toInt())
@@ -87,14 +90,12 @@ class HomeViewModel @Inject constructor(
     val buttonNames = listOf("Departure", "Arrival", "Date", "Passengers")
     val buttonNamesFilters = listOf("Sort by", "Filter", "SAVE")
 
-    private val _location = mutableStateOf(LocationResponse())
-    val location: State<LocationResponse> = _location
+    private val _location = mutableStateOf(Location())
+    val location: State<Location> = _location
 
 //    private val _flightData = mutableStateOf(ResultsModel())
 //    val flightData = _flightData
 
-    private val _flightsFromApiResponse = MutableStateFlow(ResultsModel())
-    val flightsFromApiResponse: StateFlow<ResultsModel> = _flightsFromApiResponse
 
     private val _passengers = mutableStateOf(1)
     val passengers = _passengers
@@ -149,7 +150,7 @@ class HomeViewModel @Inject constructor(
 
             when (response) {
                 is Resource.Success -> {
-                    _location.value = response.data!!.first()
+                    _location.value = response.data!!.first().toLocation()
                     _loading.value = false
                 }
                 is Resource.Loading -> {
