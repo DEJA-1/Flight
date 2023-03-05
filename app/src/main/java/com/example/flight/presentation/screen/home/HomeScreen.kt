@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,7 +31,8 @@ import com.example.flight.util.sortFlights
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
+    navigateToInfoScreen: () -> Unit,
+    navigateToSavedScreen: () -> Unit,
     themeViewModel: ThemeViewModel = viewModel(),
     viewModel: HomeViewModel,
     commonViewModel: CommonViewModel,
@@ -54,6 +56,7 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
+            .testTag("test_tag_home_screen")
     ) {
 
         if (viewModel.error.value != "") {
@@ -149,7 +152,7 @@ fun HomeScreen(
                             isSaved = false,
                             onFlightClick = { itinerary ->
                                 commonViewModel.updateCurrentItinerary(itinerary)
-                                navController.navigate(Screen.Info.route)
+                                navigateToInfoScreen()
                             }
                         )
                     }
@@ -163,7 +166,7 @@ fun HomeScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(MaterialTheme.spacing.small),
-            onClick = { navController.navigate(Screen.Saved.route) },
+            onClick = { navigateToSavedScreen() },
             backgroundColor = MaterialTheme.colors.primary,
             contentColor = MaterialTheme.colors.onBackground,
             elevation = FloatingActionButtonDefaults.elevation(4.dp)

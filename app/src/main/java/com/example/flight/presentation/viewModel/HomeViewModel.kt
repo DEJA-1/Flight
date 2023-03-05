@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
-    private val _error = mutableStateOf("Error")
+    private val _error = mutableStateOf("")
     val error: State<String> = _error
 
     private val _loadingFlights = MutableStateFlow(false)
