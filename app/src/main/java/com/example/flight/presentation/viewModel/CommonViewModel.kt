@@ -11,23 +11,21 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-@HiltViewModel
-class CommonViewModel @Inject constructor(
-    private val repository: FlightDatabaseRepository
-): ViewModel() {
+
+class CommonViewModel(): ViewModel() {
 
     private val _currentItinerary = mutableStateOf(ItineraryModel())
     val currentItinerary = _currentItinerary
 
-    private val _currentFlightParams = MutableStateFlow(FlightSearchParametersState())
-    val currentFlightParams: StateFlow<FlightSearchParametersState> = _currentFlightParams
+    private val _currentFlightSearchParametersState = MutableStateFlow(FlightSearchParametersState())
+    val currentFlightSearchParametersState: StateFlow<FlightSearchParametersState> = _currentFlightSearchParametersState
 
     fun updateCurrentItinerary(itinerary: ItineraryModel) {
         _currentItinerary.value = itinerary
     }
 
-    fun updateCurrentFlightParams(flightSearchParameters: FlightSearchParametersState) {
-        _currentFlightParams.update { flightSearchParametersState ->
+    fun updateCurrentFlightSearchParametersState(flightSearchParameters: FlightSearchParametersState) {
+        _currentFlightSearchParametersState.update { flightSearchParametersState ->
             flightSearchParametersState.copy(
                 departureTime = flightSearchParameters.departureTime,
                 locationDeparture = flightSearchParameters.locationDeparture,

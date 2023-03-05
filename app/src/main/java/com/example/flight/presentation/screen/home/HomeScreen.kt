@@ -117,7 +117,7 @@ fun HomeScreen(
                     if (buttonName != "SAVE") {
                         viewModel.updateButtonUiStateSelectedButtonName(buttonName)
                     } else {
-                        commonViewModel.updateCurrentFlightParams(flightSearchParametersState)
+                        commonViewModel.updateCurrentFlightSearchParametersState(flightSearchParametersState)
                         viewModel.getFlights(flightSearchParametersState)
                     }
                 }

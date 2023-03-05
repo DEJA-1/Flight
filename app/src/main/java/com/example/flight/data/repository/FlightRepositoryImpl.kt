@@ -5,16 +5,15 @@ import com.example.flight.common.Resource
 import com.example.flight.data.network.FlightApi
 import com.example.flight.data.network.response.flight.ApiResponse
 import com.example.flight.data.network.response.location.LocationResponse
-import com.example.flight.domain.repository.FlightLocationRepository
+import com.example.flight.domain.repository.FlightRepository
 
-class FlightLocationRepositoryImpl(
+class FlightRepositoryImpl(
     private val api: FlightApi
-) : FlightLocationRepository {
+) : FlightRepository {
     override suspend fun getLocation(name: String): Resource<List<LocationResponse>> {
         return try {
             Resource.Loading(true)
             val response = api.getLocations(name = name)
-            Log.d("Response", response.toString())
 
             if (response.first().cityName?.isNotEmpty() == true)
                 Resource.Loading(false)
@@ -34,7 +33,6 @@ class FlightLocationRepositoryImpl(
                 cityArr = cityArrival,
                 passengers = passengers
             )
-            Log.d("Response", response.toString())
 
             if (response.getAirFlightDepartures.results.result == null) {
                 Resource.Error(message = "No results")

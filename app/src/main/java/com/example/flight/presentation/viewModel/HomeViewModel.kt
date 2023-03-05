@@ -13,7 +13,7 @@ import com.example.flight.domain.model.FlightSearchParametersState
 import com.example.flight.data.network.response.location.toLocation
 import com.example.flight.domain.model.flight.ResultsModel
 import com.example.flight.domain.model.location.Location
-import com.example.flight.domain.repository.FlightLocationRepository
+import com.example.flight.domain.repository.FlightRepository
 import com.example.flight.presentation.screen.home.components.ButtonUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: FlightLocationRepository,
+    private val repository: FlightRepository,
 ) : ViewModel() {
 
     private val _filterParametersState = MutableStateFlow(FilterParametersState())
@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
-    private val _error = mutableStateOf("")
+    private val _error = mutableStateOf("Error")
     val error: State<String> = _error
 
     private val _loadingFlights = MutableStateFlow(false)
@@ -128,7 +128,6 @@ class HomeViewModel @Inject constructor(
         _flightSearchParametersState.update { flightSearchParametersState ->
             flightSearchParametersState.copy(locationDeparture = city)
         }
-        Log.d("flightSearchParameters: ", _flightSearchParametersState.value.toString())
     }
 
     fun updateFlightSearchCityArrival(city: String) {

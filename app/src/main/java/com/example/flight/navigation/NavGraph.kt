@@ -2,6 +2,7 @@ package com.example.flight.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,7 +16,7 @@ fun NavGraph(
     themeViewModel: ThemeViewModel
 ) {
     val navController = rememberNavController()
-    val commonViewModel = hiltViewModel<CommonViewModel>()
+    val commonViewModel = viewModel<CommonViewModel>()
 
     NavHost(
         navController = navController,

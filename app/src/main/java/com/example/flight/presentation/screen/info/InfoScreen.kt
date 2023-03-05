@@ -27,7 +27,7 @@ fun InfoScreen(
 ) {
 
     val itinerary = commonViewModel.currentItinerary.value
-    val currentFlightSearchParameters by commonViewModel.currentFlightParams.collectAsState()
+    val currentFlightSearchParameters by commonViewModel.currentFlightSearchParametersState.collectAsState()
 
     val isDialogOpen = remember {
         mutableStateOf(false)
@@ -84,7 +84,7 @@ fun InfoScreen(
                     passengersCount = currentFlightSearchParameters.passengers,
                 ) {
                     Toast.makeText(context, "Itinerary saved successfully", Toast.LENGTH_SHORT).show()
-                    viewModel.addItineraryToDb(commonViewModel.currentItinerary.value)
+                    viewModel.insertItineraryToDb(commonViewModel.currentItinerary.value)
                 }
 
             }
