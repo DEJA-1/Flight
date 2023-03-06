@@ -1,13 +1,21 @@
 package com.example.flight.presentation.viewModel
 
+import android.util.Log
 import com.example.flight.MainCoroutineRule
+import com.example.flight.common.Resource
 import com.example.flight.data.repository.FakeFlightRepositoryImpl
+import com.example.flight.domain.model.location.Location
 import com.google.common.truth.Truth
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModelTest {
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule()
@@ -18,10 +26,6 @@ class HomeViewModelTest {
     fun setup() {
         viewModel = HomeViewModel(FakeFlightRepositoryImpl())
     }
-
-    // TODO getLocation
-
-    // TODO getFlights
 
     @Test
     fun `HomeViewModel update filter max price`() {

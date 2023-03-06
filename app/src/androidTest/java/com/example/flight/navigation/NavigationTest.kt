@@ -55,27 +55,6 @@ class NavigationTest {
     fun navigation_verifyStartDestination() {
         composeTestRule.onNodeWithTag(Constants.TEST_TAG_HOME_SCREEN).assertIsDisplayed()
     }
-
-//    @Test
-//    fun navigation_navigateToInfoScreen() {
-//
-//        composeTestRule
-//            .waitUntil(
-//                timeoutMillis = 5000
-//            ) {
-//                composeTestRule
-//                    .onAllNodesWithTag(Constants.TEST_TAG_FLIGHT_LAZY_COLUMN)
-//                    .fetchSemanticsNodes().size == 1
-//            }
-//
-//        composeTestRule.onNodeWithTag(Constants.TEST_TAG_FLIGHT_LAZY_COLUMN)
-//            .onChildren()
-//            .onFirst()
-//            .performClick()
-//        val route = navController.currentDestination?.route
-//        assertThat(route).isEqualTo(Screen.Info.route)
-//    }
-
     @Test
     fun navigation_navigateToSavedScreen() {
         composeTestRule.onNodeWithTag(Constants.TEST_TAG_FAB).performClick()

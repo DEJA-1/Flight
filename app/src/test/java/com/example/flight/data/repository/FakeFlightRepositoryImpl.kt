@@ -10,7 +10,6 @@ import com.example.flight.domain.repository.FlightRepository
 class FakeFlightRepositoryImpl : FlightRepository {
 
     private var shouldReturnNetworkError = false
-
     fun setShouldReturnNetworkError(value: Boolean) {
         shouldReturnNetworkError = value
     }
@@ -19,7 +18,7 @@ class FakeFlightRepositoryImpl : FlightRepository {
         return if (shouldReturnNetworkError) {
             Resource.Error("Error")
         } else {
-            Resource.Success(listOf(LocationResponse()))
+            Resource.Success(listOf(LocationResponse(cityName = "New York")))
         }
     }
 
