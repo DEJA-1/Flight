@@ -34,8 +34,9 @@ import java.util.*
 @Composable
 fun DialogCity(
     openDialog: MutableState<Boolean>,
+    loadingLocation: Boolean,
     onDoneQuitClick: () -> Unit,
-    onDoneClick: (String) -> Unit
+    onDoneClick: (String) -> Unit,
 ) {
 
     val text = remember {
@@ -46,6 +47,7 @@ fun DialogCity(
         Dialog(onDismissRequest = { openDialog.value = false }) {
             CustomDialogUiCity(
                 text = text,
+                loadingLocation = loadingLocation,
                 onDoneQuitClick = onDoneQuitClick
             ) { city ->
                 onDoneClick(city)
@@ -53,14 +55,17 @@ fun DialogCity(
         }
     }
 }
+
 @Composable
 fun CustomDialogUiCity(
     text: MutableState<String>,
+    loadingLocation: Boolean,
     onDoneQuitClick: () -> Unit,
-    onDoneClick: (String) -> Unit
+    onDoneClick: (String) -> Unit,
 ) {
     CityDialogUi(
         text = text,
+        loadingLocation = loadingLocation,
         onDoneClick = onDoneClick,
         onDoneQuitClick = onDoneQuitClick
     )
@@ -69,8 +74,9 @@ fun CustomDialogUiCity(
 @Composable
 fun CityDialogUi(
     text: MutableState<String>,
+    loadingLocation: Boolean,
     onDoneClick: (String) -> Unit,
-    onDoneQuitClick: () -> Unit
+    onDoneQuitClick: () -> Unit,
 ) {
 
     val isDoneEnabled = remember {
@@ -145,7 +151,11 @@ fun CityDialogUi(
 
         }
 
-        DoneButton(isDoneEnabled = isDoneEnabled, onDoneQuitClick =  onDoneQuitClick)
+        DoneButton(
+            isDoneEnabled = isDoneEnabled,
+            loadingLocation = loadingLocation,
+            onDoneQuitClick = onDoneQuitClick
+        )
     }
 }
 

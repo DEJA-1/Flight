@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun DoneButton(
     modifier: Modifier = Modifier,
+    loadingLocation: Boolean = false,
     isDoneEnabled: MutableState<Boolean>,
     onDoneQuitClick: () -> Unit
 ) {
@@ -27,12 +28,12 @@ fun DoneButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(
-                    enabled = isDoneEnabled.value
+                    enabled = (isDoneEnabled.value && !loadingLocation)
                 ) {
                     onDoneQuitClick()
                 }
                 .background(
-                    if (isDoneEnabled.value)
+                    if (isDoneEnabled.value && !loadingLocation)
                         MaterialTheme.colors.primary
                     else
                         MaterialTheme.colors.secondary

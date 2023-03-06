@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.flight.R
+import com.example.flight.common.Constants
 import com.example.flight.navigation.Screen
 import com.example.flight.presentation.screen.home.components.FlightListSection
 import com.example.flight.presentation.screen.home.components.TopSection
@@ -44,6 +45,8 @@ fun HomeScreen(
 
     val buttonUiState by viewModel.buttonUiState.collectAsState()
 
+    val loadingLocation by viewModel.loading.collectAsState()
+
     val itineraries = flightsFromApiResponse.result?.itineraryData?.toModel()?.itineraries
     val sortCriteria = viewModel.selectedSort.value
     val filteredItineraries = filterFlights(filterParametersState, itineraries)
@@ -56,7 +59,7 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
-            .testTag("test_tag_home_screen")
+            .testTag(Constants.TEST_TAG_HOME_SCREEN)
     ) {
 
         if (viewModel.error.value != "") {
@@ -70,6 +73,7 @@ fun HomeScreen(
         ) {
             TopSection(
                 filterParametersState = filterParametersState,
+                loadingLocation = loadingLocation,
                 itineraryCount = flightsFromApiResponse.result?.itineraryCount ?: 0,
                 buttonUiState = buttonUiState,
                 isThemeSwitchChecked = themeViewModel.isDarkTheme,
@@ -148,6 +152,8 @@ fun HomeScreen(
                         }
                     else {
                         FlightListSection(
+                            modifier = Modifier
+                                .testTag(Constants.TEST_TAG_FLIGHT_LAZY_COLUMN),
                             itineraries = sortedAndFilteredFlights,
                             isSaved = false,
                             onFlightClick = { itinerary ->
@@ -165,7 +171,8 @@ fun HomeScreen(
         FloatingActionButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(MaterialTheme.spacing.small),
+                .padding(MaterialTheme.spacing.small)
+                .testTag(Constants.TEST_TAG_FAB),
             onClick = { navigateToSavedScreen() },
             backgroundColor = MaterialTheme.colors.primary,
             contentColor = MaterialTheme.colors.onBackground,

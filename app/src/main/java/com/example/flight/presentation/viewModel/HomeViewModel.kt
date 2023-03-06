@@ -91,7 +91,7 @@ class HomeViewModel @Inject constructor(
                 _loadingFlights.value = false
             }
             is Resource.Loading -> {
-                _loadingFlights.value = false
+                _loadingFlights.value = true
             }
             is Resource.Error -> {
                 _error.value = response.message.toString()

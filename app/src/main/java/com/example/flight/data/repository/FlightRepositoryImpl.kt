@@ -8,7 +8,7 @@ import com.example.flight.data.network.response.location.LocationResponse
 import com.example.flight.domain.repository.FlightRepository
 
 class FlightRepositoryImpl(
-    private val api: FlightApi
+    private val api: FlightApi,
 ) : FlightRepository {
     override suspend fun getLocation(name: String): Resource<List<LocationResponse>> {
         return try {
@@ -20,13 +20,20 @@ class FlightRepositoryImpl(
 
             Resource.Success(response)
         } catch (e: Exception) {
+            Resource.Loading(false)
             Resource.Error(message = "Invalid location")
         }
     }
 
-    override suspend fun getFlights(date: String, cityDeparture: String, cityArrival: String, passengers: Int): Resource<ApiResponse> {
+    override suspend fun getFlights(
+        date: String,
+        cityDeparture: String,
+        cityArrival: String,
+        passengers: Int,
+    ): Resource<ApiResponse> {
         return try {
             Resource.Loading(true)
+
             val response = api.getFlights(
                 date = date,
                 cityDep = cityDeparture,
@@ -34,12 +41,12 @@ class FlightRepositoryImpl(
                 passengers = passengers
             )
 
-            if (response.getAirFlightDepartures.results.result == null) {
-                Resource.Error(message = "No results")
-            } else {
-                Resource.Success(response)
-            }
+            if (response.getAirFlightDepartures.results.result != null)
+                Resource.Loading(false)
+
+            Resource.Success(response)
         } catch (e: Exception) {
+            Resource.Loading(false)
             Resource.Error(message = "No results found for given criteria")
         }
     }

@@ -24,6 +24,7 @@ import com.example.flight.util.updateIsDialogOpen
 @Composable
 fun TopSection(
     filterParametersState: FilterParametersState,
+    loadingLocation: Boolean,
     isThemeSwitchChecked: MutableState<Boolean>,
     buttonUiState: ButtonUiState,
     itineraryCount: Int,
@@ -102,6 +103,7 @@ fun TopSection(
                 "Departure" -> {
                     DialogCity(
                         openDialog = isDialogOpen,
+                        loadingLocation = loadingLocation,
                         onDoneQuitClick = {
                             updateFlightSearchCityDeparture()
                             updateIsDialogOpen(isDialogOpen)
@@ -111,6 +113,7 @@ fun TopSection(
                 "Arrival" -> {
                     DialogCity(
                         openDialog = isDialogOpen,
+                        loadingLocation = loadingLocation,
                         onDoneQuitClick = {
                             updateIsDialogOpen(isDialogOpen)
                             updateFlightSearchCityArrival()

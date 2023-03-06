@@ -3,21 +3,27 @@ package com.example.flight.navigation
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import androidx.test.espresso.Espresso
+import androidx.test.filters.MediumTest
 import com.example.flight.MainActivity
+import com.example.flight.common.Constants
 import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.FlightTheme
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import okhttp3.internal.wait
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito.verify
 
+@MediumTest
 @HiltAndroidTest
 class NavigationTest {
 
@@ -47,7 +53,44 @@ class NavigationTest {
 
     @Test
     fun navigation_verifyStartDestination() {
-        composeTestRule.onNodeWithTag("test_tag_home_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag(Constants.TEST_TAG_HOME_SCREEN).assertIsDisplayed()
     }
 
+//    @Test
+//    fun navigation_navigateToInfoScreen() {
+//
+//        composeTestRule
+//            .waitUntil(
+//                timeoutMillis = 5000
+//            ) {
+//                composeTestRule
+//                    .onAllNodesWithTag(Constants.TEST_TAG_FLIGHT_LAZY_COLUMN)
+//                    .fetchSemanticsNodes().size == 1
+//            }
+//
+//        composeTestRule.onNodeWithTag(Constants.TEST_TAG_FLIGHT_LAZY_COLUMN)
+//            .onChildren()
+//            .onFirst()
+//            .performClick()
+//        val route = navController.currentDestination?.route
+//        assertThat(route).isEqualTo(Screen.Info.route)
+//    }
+
+    @Test
+    fun navigation_navigateToSavedScreen() {
+        composeTestRule.onNodeWithTag(Constants.TEST_TAG_FAB).performClick()
+        val route = navController.currentDestination?.route
+        assertThat(route).isEqualTo(Screen.Saved.route)
+    }
+
+    @Test
+    fun navigation_popBackStack() {
+        composeTestRule.onNodeWithTag(Constants.TEST_TAG_FAB).performClick()
+        val route = navController.currentDestination?.route
+        assertThat(route).isEqualTo(Screen.Saved.route)
+
+        Espresso.pressBack()
+
+        assertThat(navController.currentDestination?.route).isEqualTo(Screen.Home.route)
+    }
 }

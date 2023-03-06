@@ -22,7 +22,7 @@ import com.example.flight.domain.model.flight.FlightModel
 import com.example.flight.presentation.screen.common_components.DoneButton
 import com.example.flight.presentation.screen.common_components.MyDivider
 import com.example.flight.ui.theme.spacing
-import com.example.flight.util.departureCityString
+import com.example.flight.util.setCityName
 
 
 @Composable
@@ -135,7 +135,7 @@ fun FlightInfoRow(
 
                         ) {
                             FlightInfo(
-                                city = departureCityString(flights[index].departure.airport),
+                                city = setCityName(flights[index].departure.airport),
                                 airport = flights[index].departure.airport.name.substringAfter("- "),
                                 date = flights[index].departure.datetime.dateDisplay.substringBeforeLast(
                                     ","
@@ -148,7 +148,7 @@ fun FlightInfoRow(
 
                         ) {
                             FlightInfo(
-                                city = departureCityString(flights[index].arrival.airport),
+                                city = setCityName(flights[index].arrival.airport),
                                 airport = flights[index].arrival.airport.name.substringAfter("- "),
                                 date = flights[index].arrival.datetime.dateDisplay.substringBeforeLast(
                                     ","
