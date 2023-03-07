@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -27,11 +28,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.flight.common.AppColors
+import com.example.flight.common.Constants
 import com.example.flight.domain.model.flight.ItineraryModel
 import com.example.flight.ui.theme.spacing
 import com.example.flight.util.checkIfArrivesNextDay
 import com.example.flight.util.convertTimeToHours
-import com.example.flight.util.departureCityString
+import com.example.flight.util.setCityName
 
 @Composable
 fun FlightListSection(
@@ -130,7 +132,7 @@ fun FlightRow(
                         top = MaterialTheme.spacing.extraSmall,
                         end = MaterialTheme.spacing.medium
                     ),
-                    text = "${departureCityString(itinerary.sliceData!!.slice.departure.airport)} -> ${departureCityString(itinerary.sliceData.slice.arrival.airport)}",
+                    text = "${setCityName(itinerary.sliceData!!.slice.departure.airport)} -> ${setCityName(itinerary.sliceData.slice.arrival.airport)}",
                     color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
@@ -144,7 +146,7 @@ fun FlightRow(
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
 
                         Row() {

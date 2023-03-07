@@ -8,6 +8,7 @@ import com.example.flight.domain.repository.FlightDatabaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -20,13 +21,13 @@ class SavedViewModel @Inject constructor(
 
 
     private val _itinerariesFromDb = MutableStateFlow(listOf<ItineraryModel>())
-    val itinerariesFromDb = _itinerariesFromDb
+    val itinerariesFromDb: StateFlow<List<ItineraryModel>> = _itinerariesFromDb
 
     init {
         getItinerariesFromDb()
     }
 
-    private fun getItinerariesFromDb() =
+     fun getItinerariesFromDb() =
         viewModelScope.launch() {
             repository.getAllItinerariesFromDb().collect() {
                 _itinerariesFromDb.value = it

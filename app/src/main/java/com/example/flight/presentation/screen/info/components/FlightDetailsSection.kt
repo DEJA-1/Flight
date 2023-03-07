@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.example.flight.domain.model.flight.ItineraryModel
 import com.example.flight.presentation.screen.common_components.MyDivider
 import com.example.flight.ui.theme.spacing
-import com.example.flight.util.departureCityString
+import com.example.flight.util.setCityName
 
 @Composable
 fun FlightDetailsSection(
@@ -58,7 +58,7 @@ fun FlightDetailsSection(
                 ) {
 
                     Text(
-                        text = departureCityString(itinerary.sliceData!!.slice.departure.airport),
+                        text = setCityName(itinerary.sliceData!!.slice.departure.airport),
                         color = MaterialTheme.colors.onBackground,
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic,
@@ -92,7 +92,7 @@ fun FlightDetailsSection(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = departureCityString(itinerary.sliceData!!.slice.arrival.airport),
+                        text = setCityName(itinerary.sliceData!!.slice.arrival.airport),
                         color = MaterialTheme.colors.onBackground,
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic,

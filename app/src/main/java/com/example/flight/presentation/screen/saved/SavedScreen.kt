@@ -29,7 +29,7 @@ import com.example.flight.ui.theme.spacing
 
 @Composable
 fun SavedScreen(
-    navController: NavController,
+    navigateToInfoScreen: () -> Unit,
     commonViewModel: CommonViewModel,
     viewModel: SavedViewModel
 ) {
@@ -88,7 +88,7 @@ fun SavedScreen(
                         }
                     ) { itinerary ->
                         commonViewModel.updateCurrentItinerary(itinerary)
-                        navController.navigate(Screen.Info.route)
+                        navigateToInfoScreen()
                     }
                 }
             }

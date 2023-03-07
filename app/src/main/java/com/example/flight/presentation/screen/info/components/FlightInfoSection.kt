@@ -25,6 +25,8 @@ fun FlightInfoSection(
     onStopInfoClicked: () -> Unit
 ) {
 
+    val itineraryConnectionCount = flight.sliceData!!.slice.info.connectionCount
+
     Surface(
         shape = RoundedCornerShape(16.dp),
         elevation = 4.dp
@@ -64,7 +66,7 @@ fun FlightInfoSection(
                 }
 
                 if (
-                    checkIfConnections(flight)
+                    checkIfConnections(itineraryConnectionCount)
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -82,7 +84,7 @@ fun FlightInfoSection(
 
             }
 
-            StopButton(flight) {
+            StopButton(itineraryConnectionCount) {
                 onStopInfoClicked()
             }
 
@@ -94,7 +96,7 @@ fun FlightInfoSection(
 
 @Composable
 fun StopButton(
-    flight: ItineraryModel,
+    itineraryConnectionCount: Int,
     onStopInfoClicked: (String) -> Unit
 ) {
     Row(
@@ -103,17 +105,18 @@ fun StopButton(
             .fillMaxHeight(0.1f)
             .fillMaxWidth()
             .background(
-                if (checkIfConnections(flight))
+                if (checkIfConnections(itineraryConnectionCount))
                     AppColors.mBlue
                 else
                     MaterialTheme.colors.secondary
             )
             .clickable(
-                enabled = checkIfConnections(flight)
+                enabled = checkIfConnections(itineraryConnectionCount)
             ) {
                 onStopInfoClicked("Stop info")
             },
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
 
         Text(

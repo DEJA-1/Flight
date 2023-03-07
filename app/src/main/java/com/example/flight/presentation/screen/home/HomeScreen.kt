@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.flight.R
+import com.example.flight.common.Constants
 import com.example.flight.navigation.Screen
 import com.example.flight.presentation.screen.home.components.FlightListSection
 import com.example.flight.presentation.screen.home.components.TopSection
@@ -30,7 +32,8 @@ import com.example.flight.util.sortFlights
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
+    navigateToInfoScreen: () -> Unit,
+    navigateToSavedScreen: () -> Unit,
     themeViewModel: ThemeViewModel = viewModel(),
     viewModel: HomeViewModel,
     commonViewModel: CommonViewModel,
@@ -41,6 +44,8 @@ fun HomeScreen(
     val flightsFromApiResponse by viewModel.flightsFromApiResponse.collectAsState()
 
     val buttonUiState by viewModel.buttonUiState.collectAsState()
+
+    val loadingLocation by viewModel.loading.collectAsState()
 
     val itineraries = flightsFromApiResponse.result?.itineraryData?.toModel()?.itineraries
     val sortCriteria = viewModel.selectedSort.value
@@ -54,6 +59,7 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
+            .testTag(Constants.TEST_TAG_HOME_SCREEN)
     ) {
 
         if (viewModel.error.value != "") {
@@ -67,6 +73,7 @@ fun HomeScreen(
         ) {
             TopSection(
                 filterParametersState = filterParametersState,
+                loadingLocation = loadingLocation,
                 itineraryCount = flightsFromApiResponse.result?.itineraryCount ?: 0,
                 buttonUiState = buttonUiState,
                 isThemeSwitchChecked = themeViewModel.isDarkTheme,
@@ -117,7 +124,7 @@ fun HomeScreen(
                     if (buttonName != "SAVE") {
                         viewModel.updateButtonUiStateSelectedButtonName(buttonName)
                     } else {
-                        commonViewModel.updateCurrentFlightParams(flightSearchParametersState)
+                        commonViewModel.updateCurrentFlightSearchParametersState(flightSearchParametersState)
                         viewModel.getFlights(flightSearchParametersState)
                     }
                 }
@@ -145,11 +152,13 @@ fun HomeScreen(
                         }
                     else {
                         FlightListSection(
+                            modifier = Modifier
+                                .testTag(Constants.TEST_TAG_FLIGHT_LAZY_COLUMN),
                             itineraries = sortedAndFilteredFlights,
                             isSaved = false,
                             onFlightClick = { itinerary ->
                                 commonViewModel.updateCurrentItinerary(itinerary)
-                                navController.navigate(Screen.Info.route)
+                                navigateToInfoScreen()
                             }
                         )
                     }
@@ -162,8 +171,9 @@ fun HomeScreen(
         FloatingActionButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(MaterialTheme.spacing.small),
-            onClick = { navController.navigate(Screen.Saved.route) },
+                .padding(MaterialTheme.spacing.small)
+                .testTag(Constants.TEST_TAG_FAB),
+            onClick = { navigateToSavedScreen() },
             backgroundColor = MaterialTheme.colors.primary,
             contentColor = MaterialTheme.colors.onBackground,
             elevation = FloatingActionButtonDefaults.elevation(4.dp)

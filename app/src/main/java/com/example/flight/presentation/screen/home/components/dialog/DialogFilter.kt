@@ -167,7 +167,6 @@ fun DisableSection(
         CustomSwitch(isChecked = isChecked) {
             isChecked.value = !isChecked.value
             onDisableNextDayArrivalsClicked(isChecked.value)
-//            viewModel.updateDisableNextDayArrivalsFilter(isChecked.value)
         }
 
     }

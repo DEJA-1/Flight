@@ -2,11 +2,23 @@ package com.example.flight.util
 
 import com.example.flight.domain.model.flight.ItineraryModel
 
-fun sortFlights(criteria: String, data: List<ItineraryModel>?) : List<ItineraryModel>?{
-    when (criteria){
-        "Departure time" -> return data?.sortedBy {it.sliceData!!.slice.departure.datetime.time24h}
-        "Price" -> return data?.sortedBy {it.priceDetails!!.totalPerTicket}
-        "Duration" ->  return data?.sortedBy { convertTimeToHours(it.sliceData!!.slice.info.duration) }
+fun sortFlights(criteria: String, itineraries: List<ItineraryModel>?): List<ItineraryModel>? {
+    return when (criteria) {
+        "Departure time" -> sortByDepartureTime(itineraries)
+        "Price" -> sortByPrice(itineraries)
+        "Duration" -> sortByDuration(itineraries)
+        else -> itineraries
     }
-    return data
+}
+
+private fun sortByDepartureTime(itineraries: List<ItineraryModel>?): List<ItineraryModel>? {
+    return itineraries?.sortedBy { it.sliceData?.slice?.departure?.datetime?.time24h }
+}
+
+private fun sortByPrice(itineraries: List<ItineraryModel>?): List<ItineraryModel>? {
+    return itineraries?.sortedBy { it.priceDetails?.totalPerTicket }
+}
+
+private fun sortByDuration(itineraries: List<ItineraryModel>?): List<ItineraryModel>? {
+    return itineraries?.sortedBy { convertTimeToHours(it.sliceData?.slice?.info?.duration.toString()) }
 }

@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -27,7 +28,7 @@ fun InfoScreen(
 ) {
 
     val itinerary = commonViewModel.currentItinerary.value
-    val currentFlightSearchParameters by commonViewModel.currentFlightParams.collectAsState()
+    val currentFlightSearchParameters by commonViewModel.currentFlightSearchParametersState.collectAsState()
 
     val isDialogOpen = remember {
         mutableStateOf(false)
@@ -38,6 +39,7 @@ fun InfoScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
+            .testTag("info_screen")
     ) {
 
         Column(
@@ -84,7 +86,7 @@ fun InfoScreen(
                     passengersCount = currentFlightSearchParameters.passengers,
                 ) {
                     Toast.makeText(context, "Itinerary saved successfully", Toast.LENGTH_SHORT).show()
-                    viewModel.addItineraryToDb(commonViewModel.currentItinerary.value)
+                    viewModel.insertItineraryToDb(commonViewModel.currentItinerary.value)
                 }
 
             }
