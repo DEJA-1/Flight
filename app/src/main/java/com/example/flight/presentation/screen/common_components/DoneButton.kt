@@ -17,7 +17,7 @@ fun DoneButton(
     modifier: Modifier = Modifier,
     loadingLocation: Boolean = false,
     isDoneEnabled: MutableState<Boolean>,
-    onDoneQuitClick: () -> Unit
+    onDoneQuitClick: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -43,7 +43,10 @@ fun DoneButton(
 
             Text(
                 modifier = Modifier.padding(top = 15.dp, bottom = 15.dp),
-                text = "Done",
+                text = if (loadingLocation)
+                    "Loading.."
+                else
+                    "Done",
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colors.onBackground
             )

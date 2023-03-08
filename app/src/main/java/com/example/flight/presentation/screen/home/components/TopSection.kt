@@ -9,12 +9,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.flight.common.TestTags
 import com.example.flight.domain.model.FilterParametersState
 import com.example.flight.presentation.screen.common_components.Header
 import com.example.flight.presentation.screen.home.components.dialog.*
@@ -23,6 +25,7 @@ import com.example.flight.util.updateIsDialogOpen
 
 @Composable
 fun TopSection(
+    modifier: Modifier = Modifier,
     filterParametersState: FilterParametersState,
     loadingLocation: Boolean,
     isThemeSwitchChecked: MutableState<Boolean>,
@@ -49,6 +52,7 @@ fun TopSection(
 
     Box(
         modifier = Modifier
+            .testTag(TestTags.TEST_TAG_TOP_SECTION)
             .fillMaxWidth()
             .fillMaxHeight(0.26f)
             .shadow(elevation = 4.dp)

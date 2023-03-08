@@ -12,6 +12,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.filters.MediumTest
 import com.example.flight.MainActivity
 import com.example.flight.common.Constants
+import com.example.flight.common.TestTags
 import com.example.flight.presentation.viewModel.ThemeViewModel
 import com.example.flight.ui.theme.FlightTheme
 import com.google.common.truth.Truth.assertThat
@@ -53,18 +54,18 @@ class NavigationTest {
 
     @Test
     fun navigation_verifyStartDestination() {
-        composeTestRule.onNodeWithTag(Constants.TEST_TAG_HOME_SCREEN).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.TEST_TAG_HOME_SCREEN).assertIsDisplayed()
     }
     @Test
     fun navigation_navigateToSavedScreen() {
-        composeTestRule.onNodeWithTag(Constants.TEST_TAG_FAB).performClick()
+        composeTestRule.onNodeWithTag(TestTags.TEST_TAG_FAB).performClick()
         val route = navController.currentDestination?.route
         assertThat(route).isEqualTo(Screen.Saved.route)
     }
 
     @Test
     fun navigation_popBackStack() {
-        composeTestRule.onNodeWithTag(Constants.TEST_TAG_FAB).performClick()
+        composeTestRule.onNodeWithTag(TestTags.TEST_TAG_FAB).performClick()
         val route = navController.currentDestination?.route
         assertThat(route).isEqualTo(Screen.Saved.route)
 

@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.flight.R
+import com.example.flight.common.TestTags
 import com.example.flight.presentation.screen.common_components.DoneButton
 import com.example.flight.presentation.screen.home.components.InputTextField
 import com.example.flight.ui.theme.spacing
@@ -99,6 +101,7 @@ fun CityDialogUi(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             InputTextField(
+                modifier = Modifier.testTag(TestTags.TEST_TAG_INPUT_TEXT_FIELD),
                 text = text,
                 label = "Enter a city",
                 onAction = KeyboardActions {

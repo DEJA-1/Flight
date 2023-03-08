@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.flight.R
 import com.example.flight.common.Constants
+import com.example.flight.common.TestTags
 import com.example.flight.navigation.Screen
 import com.example.flight.presentation.screen.home.components.FlightListSection
 import com.example.flight.presentation.screen.home.components.TopSection
@@ -59,7 +60,7 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
-            .testTag(Constants.TEST_TAG_HOME_SCREEN)
+            .testTag(TestTags.TEST_TAG_HOME_SCREEN)
     ) {
 
         if (viewModel.error.value != "") {
@@ -153,7 +154,7 @@ fun HomeScreen(
                     else {
                         FlightListSection(
                             modifier = Modifier
-                                .testTag(Constants.TEST_TAG_FLIGHT_LAZY_COLUMN),
+                                .testTag(TestTags.TEST_TAG_FLIGHT_LAZY_COLUMN),
                             itineraries = sortedAndFilteredFlights,
                             isSaved = false,
                             onFlightClick = { itinerary ->
@@ -172,7 +173,7 @@ fun HomeScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(MaterialTheme.spacing.small)
-                .testTag(Constants.TEST_TAG_FAB),
+                .testTag(TestTags.TEST_TAG_FAB),
             onClick = { navigateToSavedScreen() },
             backgroundColor = MaterialTheme.colors.primary,
             contentColor = MaterialTheme.colors.onBackground,
