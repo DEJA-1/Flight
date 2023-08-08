@@ -1,4 +1,8 @@
 # FLIGHT
+Flight tracker & booking app using API wtih realtime itineraries. The user is able to
+browse flights listed by given criteria: departure location, arrival location, departure
+time and amount of passengers and "book" them - (save to a database).
+
 
   - Neat and intuitive UI with supported both light and dark theme.
 
